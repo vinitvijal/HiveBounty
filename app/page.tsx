@@ -47,6 +47,28 @@ function page() {
           </div>
         </div>
       </header>
+
+
+
+
+      <footer className="border-t py-6 md:py-0">
+        <div className="flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row px-4 md:px-6">
+          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+            © 2025 HiveBounty. All rights reserved. Build with ❤️ by Sharma & Vinu
+          </p>
+          <div className="flex items-center gap-4">
+            <Link href="#" className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+              Terms
+            </Link>
+            <Link href="#" className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+              Privacy
+            </Link>
+            <Link href="#" className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+              Contact
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
