@@ -153,6 +153,388 @@ function page() {
           </div>
         </section>
 
+
+        <section className="border-y bg-muted/50">
+          <div className="container px-4 md:px-6 py-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+              <div className="flex flex-col items-center justify-center text-center p-4">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">$120K+</div>
+                <div className="text-sm text-muted-foreground">Bounties Paid</div>
+              </div>
+              <div className="flex flex-col items-center justify-center text-center p-4">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">2,500+</div>
+                <div className="text-sm text-muted-foreground">Active Bounties</div>
+              </div>
+              <div className="flex flex-col items-center justify-center text-center p-4">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">4,800+</div>
+                <div className="text-sm text-muted-foreground">Developers</div>
+              </div>
+              <div className="flex flex-col items-center justify-center text-center p-4">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">850+</div>
+                <div className="text-sm text-muted-foreground">Projects</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-muted text-muted-foreground w-fit">
+                Simple Process
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">How It Works</h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Our platform connects GitHub issues with Hive blockchain rewards in three simple steps
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto grid max-w-5xl items-start gap-6 py-12 md:grid-cols-3 md:gap-12">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="relative">
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 opacity-75 blur-sm"></div>
+                  <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-500 text-primary-foreground">
+                    <span className="text-xl font-bold">1</span>
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold">Create a Bounty</h3>
+                <p className="text-muted-foreground">
+                  Link your GitHub issue and lock HIVE tokens as a reward for developers who solve it. Set requirements
+                  and deadlines to attract the right talent.
+                </p>
+                <div className="relative w-full h-48 mt-4 rounded-lg overflow-hidden border">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-violet-100/50 dark:from-blue-950/50 dark:to-violet-950/50"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Image
+                      src="/placeholder.svg?height=192&width=320"
+                      alt="Create a bounty illustration"
+                      width={320}
+                      height={192}
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="relative">
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 opacity-75 blur-sm"></div>
+                  <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-500 text-primary-foreground">
+                    <span className="text-xl font-bold">2</span>
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold">Solve the Issue</h3>
+                <p className="text-muted-foreground">
+                  Developers work on the issue and submit their solutions through GitHub. The platform tracks
+                  contributions and verifies completed work.
+                </p>
+                <div className="relative w-full h-48 mt-4 rounded-lg overflow-hidden border">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-violet-100/50 dark:from-blue-950/50 dark:to-violet-950/50"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Image
+                      src="/placeholder.svg?height=192&width=320"
+                      alt="Solve issue illustration"
+                      width={320}
+                      height={192}
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="relative">
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 opacity-75 blur-sm"></div>
+                  <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-500 text-primary-foreground">
+                    <span className="text-xl font-bold">3</span>
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold">Claim Rewards</h3>
+                <p className="text-muted-foreground">
+                  Once the issue is closed, the developer can claim the bounty and receive HIVE tokens directly to their
+                  wallet. Fast, secure, and transparent.
+                </p>
+                <div className="relative w-full h-48 mt-4 rounded-lg overflow-hidden border">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-violet-100/50 dark:from-blue-950/50 dark:to-violet-950/50"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Image
+                      src="/placeholder.svg?height=192&width=320"
+                      alt="Claim rewards illustration"
+                      width={320}
+                      height={192}
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section
+          id="features"
+          className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-blue-50 to-background dark:from-blue-950/20 dark:to-background"
+        >
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-muted text-muted-foreground w-fit">
+                Platform Features
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Why Choose HiveBounty</h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Our platform offers unique features that make bounty hunting and creation seamless
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+              <Card className="relative overflow-hidden border-none bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/50 dark:to-violet-950/50">
+                <div className="absolute top-0 right-0 h-24 w-24 rounded-full bg-gradient-to-br from-blue-500/10 to-violet-500/10 blur-xl" />
+                <CardContent className="p-6 pt-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-500 text-primary-foreground mb-4">
+                    <Zap className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Fast Payments</h3>
+                  <p className="text-muted-foreground">
+                    Receive rewards instantly in your Hive wallet once your contribution is verified. No waiting periods
+                    or complex withdrawal processes.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="relative overflow-hidden border-none bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/50 dark:to-violet-950/50">
+                <div className="absolute top-0 right-0 h-24 w-24 rounded-full bg-gradient-to-br from-blue-500/10 to-violet-500/10 blur-xl" />
+                <CardContent className="p-6 pt-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-500 text-primary-foreground mb-4">
+                    <Shield className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Secure Escrow</h3>
+                  <p className="text-muted-foreground">
+                    Funds are locked in smart contracts until the work is completed and verified, ensuring security for
+                    both bounty creators and hunters.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="relative overflow-hidden border-none bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/50 dark:to-violet-950/50">
+                <div className="absolute top-0 right-0 h-24 w-24 rounded-full bg-gradient-to-br from-blue-500/10 to-violet-500/10 blur-xl" />
+                <CardContent className="p-6 pt-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-500 text-primary-foreground mb-4">
+                    <Github className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">GitHub Integration</h3>
+                  <p className="text-muted-foreground">
+                    Seamless integration with GitHub allows for automatic verification of contributions and issue status
+                    tracking.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="relative overflow-hidden border-none bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/50 dark:to-violet-950/50">
+                <div className="absolute top-0 right-0 h-24 w-24 rounded-full bg-gradient-to-br from-blue-500/10 to-violet-500/10 blur-xl" />
+                <CardContent className="p-6 pt-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-500 text-primary-foreground mb-4">
+                    <Users className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Community Driven</h3>
+                  <p className="text-muted-foreground">
+                    Join a thriving community of developers and project owners who collaborate to improve open source
+                    software.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="relative overflow-hidden border-none bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/50 dark:to-violet-950/50">
+                <div className="absolute top-0 right-0 h-24 w-24 rounded-full bg-gradient-to-br from-blue-500/10 to-violet-500/10 blur-xl" />
+                <CardContent className="p-6 pt-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-500 text-primary-foreground mb-4">
+                    <Wallet className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Crypto Rewards</h3>
+                  <p className="text-muted-foreground">
+                    Get paid in HIVE tokens that can be easily exchanged for other cryptocurrencies or fiat currencies.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="relative overflow-hidden border-none bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-950/50 dark:to-violet-950/50">
+                <div className="absolute top-0 right-0 h-24 w-24 rounded-full bg-gradient-to-br from-blue-500/10 to-violet-500/10 blur-xl" />
+                <CardContent className="p-6 pt-8">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-500 text-primary-foreground mb-4">
+                    <Trophy className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Reputation System</h3>
+                  <p className="text-muted-foreground">
+                    Build your reputation as a reliable developer or bounty creator through successful transactions and
+                    quality work.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section className="w-full py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-muted text-muted-foreground w-fit">
+                Success Stories
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">What Our Users Say</h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Hear from developers and project owners who have used HiveBounty
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+              {[
+                {
+                  quote:
+                    "I've earned over 2,000 HIVE tokens by solving bounties in my spare time. It's a great way to contribute to open source while getting paid.",
+                  name: "Alex Johnson",
+                  role: "Full Stack Developer",
+                },
+                {
+                  quote:
+                    "As a project maintainer, HiveBounty has helped me attract talented developers to fix critical issues in our codebase quickly.",
+                  name: "Sarah Chen",
+                  role: "Project Lead at OpenDev",
+                },
+                {
+                  quote:
+                    "The verification system ensures that only quality work gets rewarded. It's fair for everyone involved in the bounty process.",
+                  name: "Michael Rodriguez",
+                  role: "Blockchain Developer",
+                },
+              ].map((testimonial, i) => (
+                <Card key={i} className="relative overflow-hidden">
+                  <div className="absolute top-0 left-0 h-full w-1 bg-gradient-to-b from-blue-500 to-violet-500" />
+                  <CardContent className="p-6">
+                    <div className="mb-4 text-4xl text-muted-foreground/40">&quot;</div>
+                    <p className="mb-4 text-muted-foreground">{testimonial.quote}</p>
+                    <div className="flex items-center gap-2 mt-6">
+                      <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-primary-foreground font-medium">
+                        {testimonial.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="font-medium">{testimonial.name}</p>
+                        <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section
+          id="faq"
+          className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-background to-blue-50 dark:from-background dark:to-blue-950/20"
+        >
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-muted text-muted-foreground w-fit">
+                Questions & Answers
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Frequently Asked Questions</h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Everything you need to know about HiveBounty
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto grid max-w-4xl gap-6 md:gap-8 mt-12">
+              {[
+                {
+                  q: "How do I create a bounty?",
+                  a: "To create a bounty, you need to connect your Hive wallet, specify a GitHub issue URL, set a reward amount, and provide any additional requirements. The funds will be locked in a smart contract until the issue is resolved.",
+                },
+                {
+                  q: "How are contributions verified?",
+                  a: "We verify contributions by checking the GitHub commit history and issue status. When an issue is closed, we analyze who contributed to the solution and ensure they meet the requirements set by the bounty creator.",
+                },
+                {
+                  q: "What fees does HiveBounty charge?",
+                  a: "HiveBounty charges a small 3% fee on successful bounty claims to maintain the platform. This fee helps us improve the service and add new features.",
+                },
+                {
+                  q: "Can I work on multiple bounties at once?",
+                  a: "Yes, you can work on as many bounties as you want. There's no limit to how many issues you can solve or how many rewards you can claim.",
+                },
+                {
+                  q: "What happens if no one solves my bounty?",
+                  a: "If no one solves your bounty within the specified timeframe (if set), you can reclaim your locked funds. If no deadline is set, the funds remain locked until the issue is resolved or you cancel the bounty.",
+                },
+                {
+                  q: "How do I withdraw my HIVE tokens?",
+                  a: "HIVE tokens are sent directly to your connected Hive wallet. From there, you can transfer them to exchanges or other wallets as needed.",
+                },
+              ].map((faq, i) => (
+                <div key={i} className="space-y-2 border-b pb-6">
+                  <h3 className="text-xl font-bold">{faq.q}</h3>
+                  <p className="text-muted-foreground">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="w-full py-12 md:py-24 lg:py-32 border-t">
+          <div className="container px-4 md:px-6">
+            <div className="relative overflow-hidden rounded-lg border bg-background p-8 md:p-12">
+              <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gradient-to-b from-blue-500/20 to-violet-500/20 blur-3xl" />
+              <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-gradient-to-t from-blue-500/20 to-violet-500/20 blur-3xl" />
+              <div className="relative grid gap-6 md:grid-cols-2 md:gap-12">
+                <div className="flex flex-col justify-center space-y-4">
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
+                      Ready to start earning or finding talent?
+                    </h2>
+                    <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                      Join HiveBounty today and be part of the future of open source development. Create or claim
+                      bounties and get rewarded for your contributions.
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                    <Link href="/login">
+                      <Button className="gap-1 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700">
+                        Get Started <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                    <Link href="/bounties">
+                      <Button variant="outline">Explore Bounties</Button>
+                    </Link>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center">
+                  <div className="relative w-full max-w-sm">
+                    <div className="absolute -inset-1 rounded-lg bg-gradient-to-br from-blue-500 to-violet-500 opacity-20 blur-lg" />
+                    <div className="relative aspect-video rounded-lg overflow-hidden border bg-card">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-violet-100/50 dark:from-blue-950/50 dark:to-violet-950/50"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Image
+                          src="/placeholder.svg?height=240&width=400"
+                          alt="Platform preview"
+                          width={400}
+                          height={240}
+                          className="object-contain"
+                        />
+                      </div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="h-16 w-16 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center cursor-pointer">
+                          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-primary-foreground">
+                            <ArrowUpRight className="h-6 w-6" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
 
