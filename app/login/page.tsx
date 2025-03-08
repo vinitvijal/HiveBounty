@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Github, Wallet } from "lucide-react"
@@ -8,20 +8,29 @@ import { Github, Wallet } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useWallet } from "../hooks/useWallet"
+import { Input } from "@/components/ui/input"
 
 export default function LoginPage() {
   const router = useRouter()
-  const [isConnecting, setIsConnecting] = useState(false)
   const [isGithubConnecting, setIsGithubConnecting] = useState(false)
+  const { account, isConnecting, connect } = useWallet();
+  const [username, setUsername] = useState('');
 
   const handleHiveLogin = async () => {
-    setIsConnecting(true)
-    // Simulate Hive wallet connection
-    setTimeout(() => {
-      setIsConnecting(false)
-      router.push("/dashboard")
-    }, 1500)
+    if (username.trim()) {
+        connect(username.trim());
+        setUsername('');
+      }
+ 
   }
+
+  useEffect(()=>{
+    if(account){
+      console.log(account)
+      router.push("/dashboard")
+    }
+  }, [account])
 
   const handleGithubLogin = async () => {
     setIsGithubConnecting(true)
@@ -59,7 +68,8 @@ export default function LoginPage() {
               </CardHeader>
               <CardContent className="space-y-2">
                 <div className="space-y-4">
-                  <Button className="w-full" onClick={handleHiveLogin} disabled={isConnecting}>
+                  <Input type="text" value={username} onChange={(e)=>setUsername(e.target.value)} placeholder="Enter Hive Username" disabled={isConnecting}/>
+                  <Button className="w-full" onClick={()=>handleHiveLogin()} disabled={isConnecting}>
                     {isConnecting ? "Connecting..." : "Connect Hive Wallet"}
                   </Button>
                 </div>

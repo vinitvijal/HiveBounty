@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { isKeychainInstalled, connectWithKeychain, HiveAccount } from '../utils/hive';
-
+import { isKeychainInstalled, connectWithKeychain } from '../utils/hive';
+import { HiveAccount } from '../types/hive.types';
 export const useWallet = () => {
   const [account, setAccount] = useState<HiveAccount | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
