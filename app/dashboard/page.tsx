@@ -76,8 +76,8 @@ export default function DashboardPage() {
   )
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="border-b">
+    <div className="flex flex-col min-h-screen ">
+      <header className="border-b flex w-full justify-center items-center">
         <div className="container flex h-16 items-center justify-between px-4 md:px-6">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
             <Code2 className="h-6 w-6" />
@@ -98,7 +98,8 @@ export default function DashboardPage() {
           </div>
         </div>
       </header>
-      <main className="flex-1 container py-6 px-4 md:px-6">
+      <main className=" flex w-full justify-center items-center">
+      <div className="flex-1 container py-6 px-4 md:px-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Bounties</h1>
@@ -181,6 +182,7 @@ export default function DashboardPage() {
             </div>
           </TabsContent>
         </Tabs>
+      </div>
       </main>
       <CreateBountyModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </div>
