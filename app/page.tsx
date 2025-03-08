@@ -1,16 +1,15 @@
-import React from 'react'
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Check, Code2, Github, Wallet, Zap, Shield, Users, Trophy, ArrowUpRight } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
-
-function page() {
+export default function Home() {
   return (
-    <div className='flex flex-col min-h-screen dark'>
-      <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className=" flex h-16 items-center justify-between px-4 md:px-6">
+    <div className="flex flex-col min-h-screen">
+      <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full flex items-center justify-center">
+        <div className="container flex h-16 items-center justify-between px-4 md:px-6">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
             <Code2 className="h-6 w-6" />
             <span>HiveBounty</span>
@@ -42,17 +41,16 @@ function page() {
               </Button>
             </Link>
             <Link href="/login">
-              <Button size="sm" variant="outline">Get Started</Button>
+              <Button size="sm">Get Started</Button>
             </Link>
           </div>
         </div>
       </header>
-
-
-      <main className='flex-1'>
-      <section className="relative md:px-20 overflow-hidden bg-gradient-to-b from-background to-blue-50 dark:from-background dark:to-blue-950/20 py-20 md:py-32">
-          <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
-          <div className=" px-4 md:px-6 relative">
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden bg-gradient-to-b w-full flex items-center justify-center from-background to-blue-50 dark:from-background dark:to-blue-950/20 py-20 md:py-32">
+          <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] " />
+          <div className="container px-4 md:px-6 relative">
             <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80 w-fit mb-2">
@@ -95,6 +93,7 @@ function page() {
               </div>
               <div className="flex items-center justify-center lg:justify-end">
                 <div className="relative w-full max-w-sm">
+                  {/* Decorative elements */}
                   <div className="absolute -top-12 -left-12 h-40 w-40 rounded-full bg-blue-500/10 blur-3xl" />
                   <div className="absolute -bottom-12 -right-12 h-40 w-40 rounded-full bg-violet-500/10 blur-3xl" />
 
@@ -141,7 +140,7 @@ function page() {
                           <Wallet className="h-4 w-4 text-primary" />
                           <span className="font-medium">250 HIVE</span>
                         </div>
-                        <Button size="sm" variant="ghost" className='bg-zinc-50 text-zinc-700 cursor-pointer hover:bg-zinc-100'>
+                        <Button size="sm" variant="secondary">
                           View Details
                         </Button>
                       </div>
@@ -153,9 +152,9 @@ function page() {
           </div>
         </section>
 
-
-        <section className="border-y bg-muted/50">
-          <div className=" px-4 md:px-6 py-12">
+        {/* Stats Section */}
+        <section className="border-y bg-muted/50 w-full flex items-center justify-center">
+          <div className="container px-4 md:px-6 py-12">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
               <div className="flex flex-col items-center justify-center text-center p-4">
                 <div className="text-3xl md:text-4xl font-bold text-primary mb-2">$120K+</div>
@@ -178,8 +177,8 @@ function page() {
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32">
-          <div className=" px-4 md:px-6">
+        <section id="how-it-works" className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-muted text-muted-foreground w-fit">
                 Simple Process
@@ -274,9 +273,9 @@ function page() {
         {/* Features Section */}
         <section
           id="features"
-          className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-blue-50 to-background dark:from-blue-950/20 dark:to-background"
+          className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32 bg-gradient-to-b from-blue-50 to-background dark:from-blue-950/20 dark:to-background"
         >
-          <div className=" px-4 md:px-40">
+          <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-muted text-muted-foreground w-fit">
                 Platform Features
@@ -371,8 +370,8 @@ function page() {
         </section>
 
         {/* Testimonials Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className=" px-4 md:px-6">
+        <section className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-muted text-muted-foreground w-fit">
                 Success Stories
@@ -429,9 +428,9 @@ function page() {
         {/* FAQ Section */}
         <section
           id="faq"
-          className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-background to-blue-50 dark:from-background dark:to-blue-950/20"
+          className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32 bg-gradient-to-b from-background to-blue-50 dark:from-background dark:to-blue-950/20"
         >
-          <div className=" px-4 md:px-6">
+          <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-muted text-muted-foreground w-fit">
                 Questions & Answers
@@ -479,15 +478,67 @@ function page() {
           </div>
         </section>
 
-       
+        {/* CTA Section */}
+        <section className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32 border-t">
+          <div className="container px-4 md:px-6">
+            <div className="relative overflow-hidden rounded-lg border bg-background p-8 md:p-12">
+              <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-gradient-to-b from-blue-500/20 to-violet-500/20 blur-3xl" />
+              <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-gradient-to-t from-blue-500/20 to-violet-500/20 blur-3xl" />
+              <div className="relative grid gap-6 md:grid-cols-2 md:gap-12">
+                <div className="flex flex-col justify-center space-y-4">
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
+                      Ready to start earning or finding talent?
+                    </h2>
+                    <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                      Join HiveBounty today and be part of the future of open source development. Create or claim
+                      bounties and get rewarded for your contributions.
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                    <Link href="/login">
+                      <Button className="gap-1 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700">
+                        Get Started <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                    <Link href="/bounties">
+                      <Button variant="outline">Explore Bounties</Button>
+                    </Link>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center">
+                  <div className="relative w-full max-w-sm">
+                    <div className="absolute -inset-1 rounded-lg bg-gradient-to-br from-blue-500 to-violet-500 opacity-20 blur-lg" />
+                    <div className="relative aspect-video rounded-lg overflow-hidden border bg-card">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-violet-100/50 dark:from-blue-950/50 dark:to-violet-950/50"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Image
+                          src="/placeholder.svg?height=240&width=400"
+                          alt="Platform preview"
+                          width={400}
+                          height={240}
+                          className="object-contain"
+                        />
+                      </div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="h-16 w-16 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center cursor-pointer">
+                          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-primary-foreground">
+                            <ArrowUpRight className="h-6 w-6" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
-
-
-
-      <footer className="border-t py-6 md:py-0">
-        <div className="flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row px-4 md:px-6">
+      <footer className="w-full flex items-center justify-center border-t py-6 md:py-0">
+        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row px-4 md:px-6">
           <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            © 2025 HiveBounty. All rights reserved. Build with ❤️ by Sharma & Vinu.
+            © 2025 HiveBounty. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <Link href="#" className="text-sm text-muted-foreground underline-offset-4 hover:underline">
@@ -506,4 +557,3 @@ function page() {
   )
 }
 
-export default page
