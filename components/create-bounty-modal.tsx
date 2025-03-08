@@ -1,0 +1,123 @@
+"use client"
+
+import type React from "react"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { Wallet } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+
+interface CreateBountyModalProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps) {
+  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    issueUrl: "",
+    amount: "",
+    description: "",
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    // Simulate API call to create bounty
+    setTimeout(() => {
+      setIsSubmitting(false)
+      onOpenChange(false)
+      router.push("/dashboard")
+    }, 1500)
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[500px]">
+        <form onSubmit={handleSubmit}>
+          <DialogHeader>
+            <DialogTitle>Create a Bounty</DialogTitle>
+            <DialogDescription>
+              Link a GitHub issue and set a reward amount for developers to solve it.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="issueUrl">GitHub Issue URL</Label>
+              <Input
+                id="issueUrl"
+                name="issueUrl"
+                placeholder="https://github.com/username/repo/issues/123"
+                value={formData.issueUrl}
+                onChange={handleChange}
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                Enter the full URL to the GitHub issue you want to create a bounty for
+              </p>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="amount">Bounty Amount (HIVE)</Label>
+              <div className="relative">
+                <Wallet className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="amount"
+                  name="amount"
+                  type="number"
+                  placeholder="100"
+                  className="pl-8"
+                  value={formData.amount}
+                  onChange={handleChange}
+                  required
+                  min="1"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                This amount will be locked in a smart contract until the issue is resolved
+              </p>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="description">Additional Description (Optional)</Label>
+              <Textarea
+                id="description"
+                name="description"
+                placeholder="Add any additional details or requirements for the bounty..."
+                value={formData.description}
+                onChange={handleChange}
+                rows={3}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Creating..." : "Create Bounty"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
