@@ -47,7 +47,6 @@ export default function Home() {
         </div>
       </header>
       <main className="flex-1">
-        {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-to-b w-full flex items-center justify-center from-background to-blue-50 dark:from-background dark:to-blue-950/20 py-20 md:py-32">
           <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] " />
           <div className="container px-4 md:px-6 relative">
@@ -152,7 +151,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Stats Section */}
         <section className="border-y bg-muted/50 w-full flex items-center justify-center">
           <div className="container px-4 md:px-6 py-12">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
@@ -176,7 +174,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* How It Works Section */}
         <section id="how-it-works" className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -270,7 +267,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features Section */}
         <section
           id="features"
           className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32 bg-gradient-to-b from-blue-50 to-background dark:from-blue-950/20 dark:to-background"
@@ -369,7 +365,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Testimonials Section */}
         <section className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -425,7 +420,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FAQ Section */}
         <section
           id="faq"
           className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32 bg-gradient-to-b from-background to-blue-50 dark:from-background dark:to-blue-950/20"
@@ -478,7 +472,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CTA Section */}
         <section className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32 border-t">
           <div className="container px-4 md:px-6">
             <div className="relative overflow-hidden rounded-lg border bg-background p-8 md:p-12">
