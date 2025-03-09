@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CreateBountyModal } from "@/components/create-bounty-modal"
 import { useWallet } from "../hooks/useWallet"
-import { useBounties } from "../hooks/useBounties"
 
 // Mock data for bounties
 const mockBounties = [
@@ -71,7 +70,6 @@ export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const { account, disconnect, isConnecting } = useWallet();
   // const Router = useRouter()
-  const { createBounty } = useBounties();
 
 
 

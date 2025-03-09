@@ -33,6 +33,19 @@ export const parseGitHubUrl = (url: string): { owner: string; repo: string; numb
       return false;
     }
   };
+
+  export const isIssueClosed = async (owner: string, repo: string, issueNumber: number): Promise<boolean> => {
+    try {
+      const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}`);
+      const data = await response.json();
+      
+      return data.state === 'closed';
+    } catch (error) {
+      console.error('Error fetching issue data:', error);
+      return false;
+    }
+  }
+  
   
   // Get PR details including merge status and user
   export const getPullRequestDetails = async (owner: string, repo: string, prNumber: number): Promise<{
