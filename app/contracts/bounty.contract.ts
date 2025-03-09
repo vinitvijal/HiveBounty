@@ -44,7 +44,7 @@ export class BountyContract {
         }),
         'Create Development Bounty',
         (response: any) => {
-          if (response.success) {
+          if (response.success && response.result && response.result.id) {
             // First, transfer HIVE to contract account after successful custom_json
             sendHiveTokens(
               this.username,
@@ -61,13 +61,13 @@ export class BountyContract {
               } else {
                 resolve({
                   success: false,
-                  message: 'Bounty created but funding failed: ' + fundResult.message
+                  message: 'Bounty created but funding failed (1): ' + fundResult.message
                 });
               }
             }).catch(err => {
               resolve({
                 success: false,
-                message: 'Bounty created but funding failed: ' + err.message
+                message: 'Bounty created but funding failed (2): ' + err.message
               });
             });
           } else {

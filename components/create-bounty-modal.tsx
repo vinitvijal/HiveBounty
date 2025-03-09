@@ -17,11 +17,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { useBounties } from "@/app/hooks/useBounties"
 import { getIssueData, parseGitHubUrl } from "@/app/utils/github"
-import { createIssue } from "@/app/actions/github"
 import { Session } from "next-auth"
-import { useWallet } from "@/app/hooks/useWallet"
 import { BountyContract } from "@/app/contracts/bounty.contract"
 import { Auth } from "@/app/lib/auth-next"
 import { toast } from "sonner"
@@ -77,7 +74,7 @@ export function CreateBountyModal({ open, onOpenChange, accountName }: CreateBou
       return
     }
 
-    const issueData: { title: string; description: string } | boolean = await getIssueData(owner, repo, number);
+    const issueData = await getIssueData(owner, repo, number);
     if (!issueData) {
       alert("Invalid GitHub issue URL")
       setIsSubmitting(false)
