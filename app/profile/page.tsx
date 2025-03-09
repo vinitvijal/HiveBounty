@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useWallet } from "../hooks/useWallet"
 
 // Mock user data
 const mockUser = {
@@ -24,6 +25,17 @@ const mockUser = {
 }
 
 export default function ProfilePage() {
+  const { account, isConnecting, error, isKeychainInstalled, connect, disconnect } = useWallet();
+
+  if(isConnecting){
+    return <div>Connecting...</div>
+  }
+  if (error) {
+    return <div>{error}</div>
+  }
+
+  if(account){
+
   return (
     <div className="flex flex-col min-h-screen  ">
       <header className="border-b w-full flex justify-center">
@@ -41,7 +53,7 @@ export default function ProfilePage() {
             <Link href="/">
               <Button variant="outline" size="sm">
                 <Wallet className="mr-2 h-4 w-4" />
-                <span>Connected</span>
+                <span>Connected as @{account.name}</span>
               </Button>
             </Link>
           </div>
@@ -62,11 +74,12 @@ export default function ProfilePage() {
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
                     <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center">
-                      <User className="h-8 w-8 text-muted-foreground" />
+                      {account.profile_image ?
+                        <img src={account.profile_image} alt="Profile" className="h-16 w-16 rounded-full" /> : <User className="h-8 w-8" />}
                     </div>
                     <div>
-                      <h3 className="font-medium">{mockUser.username}</h3>
-                      <p className="text-sm text-muted-foreground">{mockUser.walletAddress}</p>
+                      <h3 className="font-medium">{account.name}</h3>
+                      <p className="text-sm text-muted-foreground">{account.name}</p>
                     </div>
                   </div>
                   <Separator />
@@ -75,7 +88,7 @@ export default function ProfilePage() {
                       <Wallet className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm">Hive Balance</span>
                     </div>
-                    <span className="font-medium">{mockUser.balance} HIVE</span>
+                    <span className="font-medium">{account.balance}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
@@ -83,11 +96,11 @@ export default function ProfilePage() {
                       <span className="text-sm">GitHub</span>
                     </div>
                     <Link
-                      href={`https://github.com/${mockUser.githubUsername}`}
+                      href={`https://github.com/${'vinitvijal'}`}
                       className="font-medium hover:underline"
                       target="_blank"
                     >
-                      {mockUser.githubUsername}
+                      vinitvijal
                     </Link>
                   </div>
                   <Separator />
@@ -221,5 +234,6 @@ export default function ProfilePage() {
       </div>
     </div>
   )
+}
 }
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Code2, Filter, Plus, Search, Wallet } from "lucide-react"
 
@@ -9,6 +9,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CreateBountyModal } from "@/components/create-bounty-modal"
+import { useWallet } from "../hooks/useWallet"
+import { useRouter } from "next/navigation"
 
 // Mock data for bounties
 const mockBounties = [
@@ -67,7 +69,8 @@ const mockBounties = [
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-
+  const { account } = useWallet();
+  // const Router = useRouter()
   const filteredBounties = mockBounties.filter(
     (bounty) =>
       bounty.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -75,6 +78,7 @@ export default function DashboardPage() {
       bounty.language.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
+  
   return (
     <div className="flex flex-col min-h-screen ">
       <header className="border-b flex w-full justify-center items-center">
@@ -89,12 +93,10 @@ export default function DashboardPage() {
                 Profile
               </Button>
             </Link>
-            <Link href="/">
-              <Button variant="outline" size="sm">
+              {account && <Button variant="outline" size="sm">
                 <Wallet className="mr-2 h-4 w-4" />
-                <span>Connected</span>
-              </Button>
-            </Link>
+                <span>Connected as @{account.name}</span>
+              </Button>}
           </div>
         </div>
       </header>
