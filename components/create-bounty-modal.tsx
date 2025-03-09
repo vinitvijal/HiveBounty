@@ -19,7 +19,9 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useBounties } from "@/app/hooks/useBounties"
 import { getIssueData, parseGitHubUrl } from "@/app/utils/github"
-
+import { createIssue } from "@/app/actions/github"
+import { Session } from "next-auth"
+  
 interface CreateBountyModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -27,6 +29,7 @@ interface CreateBountyModalProps {
 
 export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps) {
   const { createBounty } = useBounties();
+  const [session, setSession] = useState<Session | null>()
 
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -46,7 +49,11 @@ export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps
     setIsSubmitting(true)
     console.log(e)
 
-    // https://github.com/vinitvijal/Habilite-Next-Project/issues/204 parse into owner, repo, number
+    if (!session){
+      alert("Please login to create a bounty")
+      setIsSubmitting(false)
+      return
+    }
     const data = parseGitHubUrl(formData.issueUrl);
     if (!data) {
       alert("Invalid GitHub issue URL")
@@ -70,10 +77,22 @@ export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps
 
     console.log(issueData)
 
+    if (!issueData){
+      alert("Invalid GitHub issue URL")
+      setIsSubmitting(false)
+      return
+    }
+
+    const lang = await fetch(`https://api.github.com/repos/${owner}/${repo}/languages`).then(res => res.json()).then(data => data)
+    console.log(lang)
+
+
+    // Create bounty
+  
 
 
     // setTimeout(() => {
-    //   setIsSubmitting(false)
+      setIsSubmitting(false)
       onOpenChange(false)
     //   router.push("/dashboard")
     // }, 1500)
