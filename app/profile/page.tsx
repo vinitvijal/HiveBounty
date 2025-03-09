@@ -1,14 +1,18 @@
 "use client"
 
 import Link from "next/link"
-import { Code2, Github, History, LogOut, Settings, User, Wallet } from "lucide-react"
+import { CheckCheck, Code2, Github, History, LogOut, Settings, User, Wallet } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "../hooks/useWallet"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { Input } from "@/components/ui/input"
+import { Session } from "next-auth"
+import { Auth, SignIn, SignOut } from "../lib/auth-next"
+import { useRouter } from "next/navigation"
 
 // Mock user data
 const mockUser = {
@@ -25,20 +29,81 @@ const mockUser = {
   ],
 }
 
+
+
 export default function ProfilePage() {
-  const { account, isConnecting, error } = useWallet();
+  const { account, connect, isConnecting, isKeychainInstalled, disconnect } = useWallet();
+  const [username, setUsername] = useState('');
+  const [session, setSession] = useState<Session | null>()
+  const router = useRouter()
 
-
-  if(isConnecting){
-    return <div>Connecting...</div>
+  const getLoggedOut = () => {
+    disconnect()
+    setSession(null);
+    router.replace("/")
   }
 
-  if(error){
-    return <div>{error}</div>
+  const getGithubSignIn = async () => {
+    await SignIn()
+    getSession()
+
   }
 
-  if(account){
+  const getGithubOut = async () => {
+    await SignOut()
+    router.refresh()
+  }
+ 
+ 
+  async function getSession(){
+    const session = await Auth()
+    setSession(session)
+  }
 
+  useEffect(()=>{
+    getSession()
+  }
+  ,[])
+
+  if (isConnecting) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col items-center space-y-4">
+          <h2 className="text-2xl font-bold">Connecting your wallet</h2>
+          <p className="text-muted-foreground text-center">Please wait while we connect your wallet...</p>
+        </div>
+      </div>
+    );
+  }
+
+
+  if (!account && !isConnecting) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col items-center space-y-4">
+          <h2 className="text-2xl font-bold">Connect your wallet</h2>
+          <p className="text-muted-foreground text-center">
+            Connect your Hive account to view your profile and manage your account settings
+          </p>
+          <Input
+            placeholder="Enter your Hive username"
+            value={username}
+            onChange={(e) => {setUsername(e.target.value)}}
+            className="w-full"
+            disabled={isConnecting}
+          />
+          <Button
+            onClick={() => connect(username)}
+            disabled={isConnecting || !isKeychainInstalled}
+          >
+            Connect with Hive Keychain
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (account){
   return (
     <div className="flex flex-col min-h-screen  ">
       <header className="border-b w-full flex justify-center">
@@ -77,8 +142,8 @@ export default function ProfilePage() {
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
                     <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center">
-                      {account.profile_image ?
-                        <img src={account.profile_image} alt="Profile" className="h-16 w-16 rounded-full" /> : <User className="h-8 w-8" />}
+                      {session?.user?.image ?
+                        <img src={session.user.image} alt="Profile" className="h-16 w-16 rounded-full" /> : <User className="h-8 w-8" />}
                     </div>
                     <div>
                       <h3 className="font-medium">{account.name}</h3>
@@ -98,13 +163,13 @@ export default function ProfilePage() {
                       <Github className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm">GitHub</span>
                     </div>
-                    <Link
+                    {session ? <Link
                       href={`https://github.com/${'vinitvijal'}`}
-                      className="font-medium hover:underline"
+                      className="font-medium flex gap-2 hover:underline"
                       target="_blank"
                     >
-                      vinitvijal
-                    </Link>
+                      {session.user?.id} <CheckCheck color="green" />
+                    </Link> : <span className="font-medium">Not connected </span>}
                   </div>
                   <Separator />
                   <div className="space-y-2">
@@ -113,9 +178,15 @@ export default function ProfilePage() {
                         <Settings className="mr-2 h-4 w-4" /> Account Settings
                       </Link>
                     </Button>
-                    <Button variant="outline" className="w-full justify-start text-destructive hover:text-destructive">
+                    <Button variant="outline" onClick={()=>getLoggedOut()} className="w-full justify-start text-red-500 ">
                       <LogOut className="mr-2 h-4 w-4" /> Disconnect Wallet
                     </Button>
+                    {session ? <Button variant="outline" onClick={()=>getGithubOut()} className="w-full justify-start text-red-500 ">
+                      <LogOut className="mr-2 h-4 w-4" /> Disconnect Github
+                    </Button> : 
+                    <Button variant="outline" onClick={()=>getGithubSignIn()} className="w-full justify-start">
+                      <Github className="mr-2 h-4 w-4" /> Connect with GitHub
+                    </Button>}
                   </div>
                 </div>
               </CardContent>
@@ -238,5 +309,4 @@ export default function ProfilePage() {
     </div>
   )
 }
-}
-
+};

@@ -9,6 +9,8 @@ export const useWallet = () => {
   useEffect(() => {
     // Check for saved username in localStorage
     const savedUsername = localStorage.getItem('hiveUsername');
+    console.log("searched for username")
+    console.log(savedUsername)
     if (savedUsername) {
       handleConnect(savedUsername);
     }
@@ -20,6 +22,7 @@ export const useWallet = () => {
     
     try {
       const response = await connectWithKeychain(username);
+      console.log(response)
       if (response.success && response.account) {
         setAccount(response.account);
       } else {

@@ -3,19 +3,22 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Github, Wallet } from "lucide-react"
+import { CheckCheck, Github, Wallet } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "../hooks/useWallet"
 import { Input } from "@/components/ui/input"
-import { SignIn } from "../lib/auth-next"
+import { Auth, SignIn } from "../lib/auth-next"
+import { auth } from "@/auth"
+import { Session } from "next-auth"
 
 export default function LoginPage() {
   const router = useRouter()
-  const [isGithubConnecting, setIsGithubConnecting] = useState(false)
   const { account, isConnecting, connect } = useWallet();
   const [username, setUsername] = useState('');
+  const [session, setSession] = useState<Session | null>()
+
 
   const handleHiveLogin = async () => {
     if (username.trim()) {
@@ -31,6 +34,24 @@ export default function LoginPage() {
       router.push("/dashboard")
     }
   }, [account])
+
+
+  useEffect(()=>{
+    if(session){
+      console.log(session)
+    }
+  }, [session])
+
+  useEffect(()=>{
+    async function getSession(){
+      const session = await Auth()
+      setSession(session)
+    }
+    getSession()
+  }
+  ,[])
+
+
 
   const handleGithubLogin = async () => {
 
@@ -90,10 +111,10 @@ export default function LoginPage() {
                     className="w-full"
                     variant="outline"
                     onClick={() => handleGithubLogin()}
-                    disabled={isGithubConnecting}
+                    disabled={session ? true : false}
                   >
-                    <Github className="mr-2 h-4 w-4" />
-                    {isGithubConnecting ? "Connecting..." : "Connect with GitHub"}
+                    
+                    {session ? (<span className=" flex gap-2">Connected as {session.user?.name} <CheckCheck color="green" /></span>) : <span><Github className="mr-2 h-4 w-4" />Connect with GitHub</span>}
                   </Button>
                 </div>
               </CardContent>
