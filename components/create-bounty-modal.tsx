@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Wallet } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -21,16 +21,19 @@ import { useBounties } from "@/app/hooks/useBounties"
 import { getIssueData, parseGitHubUrl } from "@/app/utils/github"
 import { createIssue } from "@/app/actions/github"
 import { Session } from "next-auth"
+import { useWallet } from "@/app/hooks/useWallet"
+import { BountyContract } from "@/app/contracts/bounty.contract"
+import { Auth } from "@/app/lib/auth-next"
+import { toast } from "sonner"
   
 interface CreateBountyModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  accountName: string
 }
 
-export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps) {
-  const { createBounty } = useBounties();
+export function CreateBountyModal({ open, onOpenChange, accountName }: CreateBountyModalProps) {
   const [session, setSession] = useState<Session | null>()
-
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
@@ -54,6 +57,13 @@ export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps
       setIsSubmitting(false)
       return
     }
+
+    if (!window.hive_keychain) {
+      alert('Hive Keychain extension not found');
+      return;
+    }
+
+
     const data = parseGitHubUrl(formData.issueUrl);
     if (!data) {
       alert("Invalid GitHub issue URL")
@@ -67,16 +77,13 @@ export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps
       return
     }
 
-    console.log(owner, repo, number)
-    const issueData = await getIssueData(owner, repo, number);
+    const issueData: { title: string; description: string } | boolean = await getIssueData(owner, repo, number);
     if (!issueData) {
       alert("Invalid GitHub issue URL")
       setIsSubmitting(false)
       return
     }
-
     console.log(issueData)
-
     if (!issueData){
       alert("Invalid GitHub issue URL")
       setIsSubmitting(false)
@@ -86,17 +93,43 @@ export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps
     const lang = await fetch(`https://api.github.com/repos/${owner}/${repo}/languages`).then(res => res.json()).then(data => data)
     console.log(lang)
 
+    const bountyContract = new BountyContract(accountName);
+    const response = await bountyContract.createBounty({
+      title: issueData.title,
+      description: issueData.body,
+      githubLink: formData.issueUrl,
+      prizePool: parseFloat(formData.amount)
+    });
 
-    // Create bounty
-  
 
 
-    // setTimeout(() => {
+
+    if (response.success) {
+      toast.success('Bounty successfully created on Hive blockchain!');
+    } else {
+      // setError(response.message);
+      toast.error(response.message);
+    }
+ 
+    console.log(response)
+
+
+
       setIsSubmitting(false)
       onOpenChange(false)
-    //   router.push("/dashboard")
-    // }, 1500)
   }
+
+
+  useEffect(() => {
+    async function fetchSession() {
+      const session = await Auth()
+      setSession(session)
+      console.log(session)
+    }
+    fetchSession()
+  }
+  , [])
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

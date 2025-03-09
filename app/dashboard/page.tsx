@@ -195,7 +195,7 @@ export default function DashboardPage() {
         </Tabs>
       </div>
       </main>
-      <CreateBountyModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+      {account && <CreateBountyModal open={isModalOpen} onOpenChange={setIsModalOpen} accountName={account.name} />}
     </div>
   )
 }
