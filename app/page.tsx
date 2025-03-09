@@ -203,12 +203,10 @@ export default function Home() {
                 <div className="relative w-full h-48 mt-4 rounded-lg overflow-hidden border">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-violet-100/50 dark:from-blue-950/50 dark:to-violet-950/50"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Image
-                      src="/placeholder.svg?height=192&width=320"
+                    <img
+                      src="https://github.blog/wp-content/uploads/2021/06/GitHub-Bug-Bounty_for-social.png?fit=1200%2C630"
                       alt="Create a bounty illustration"
-                      width={320}
-                      height={192}
-                      className="object-contain"
+                      className="object-cover h-full"
                     />
                   </div>
                 </div>
@@ -228,12 +226,10 @@ export default function Home() {
                 <div className="relative w-full h-48 mt-4 rounded-lg overflow-hidden border">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-violet-100/50 dark:from-blue-950/50 dark:to-violet-950/50"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Image
-                      src="/placeholder.svg?height=192&width=320"
+                    <img
+                      src="https://pbs.twimg.com/media/GM_goe1aQAAkGzf.jpg:large"
                       alt="Solve issue illustration"
-                      width={320}
-                      height={192}
-                      className="object-contain"
+                      className="object-cover h-full"
                     />
                   </div>
                 </div>
@@ -253,12 +249,12 @@ export default function Home() {
                 <div className="relative w-full h-48 mt-4 rounded-lg overflow-hidden border">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-violet-100/50 dark:from-blue-950/50 dark:to-violet-950/50"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Image
-                      src="/placeholder.svg?height=192&width=320"
+                    <img
+                      src="https://cdn3d.iconscout.com/3d/premium/thumb/github-3d-icon-download-in-png-blend-fbx-gltf-file-formats--social-media-logos-logo-brand-golden-pack-icons-9791628.png"
                       alt="Claim rewards illustration"
                       width={320}
                       height={192}
-                      className="object-contain"
+                      className=""
                     />
                   </div>
                 </div>
