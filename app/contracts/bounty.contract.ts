@@ -17,6 +17,16 @@ export class BountyContract {
     this.username = username;
   }
 
+  async fundBounty(bountyId: string, amount: number): Promise<TransactionResponse> {
+    return sendHiveTokens(
+      this.username,
+      CONTRACT_ACCOUNT,
+      amount.toString(),
+      `bounty-fund-${bountyId}`
+    );
+  }
+  
+
   // Create new bounty
   async createBounty(bountyData: Omit<BountyProgram, 'id' | 'creator' | 'status' | 'created'>): Promise<TransactionResponse> {
     // Create bounty record

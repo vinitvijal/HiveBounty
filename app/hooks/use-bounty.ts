@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
-import { BountyContract } from '@/contracts/bounty.contract';
+import { BountyContract } from '@/app/contracts/bounty.contract';
 import { useHiveWallet } from './use-hive-wallet';
 
 export const useBounty = () => {
-  const { connectedUser } = useHiveWallet();
+  const { accountInfo } = useHiveWallet();
   const [isLoading, setIsLoading] = useState(false);
 
-  const contract = connectedUser ? new BountyContract(connectedUser) : null;
+  const contract = accountInfo ? new BountyContract(accountInfo.name) : null;
 
   const createBounty = async (bountyData: any) => {
     if (!contract) throw new Error('Wallet not connected');
@@ -17,7 +18,7 @@ export const useBounty = () => {
       if (result.success) {
         // Then fund it
         const fundResult = await contract.fundBounty(
-          result.txId,
+          result.txId as string,
           bountyData.prizePool
         );
         return fundResult;
@@ -42,7 +43,7 @@ export const useBounty = () => {
         throw new Error('Invalid claim - PR not merged or hash mismatch');
       }
 
-      return await contract.submitSolution(submission);
+      // return await contract.submitSolution(submission);
     } finally {
       setIsLoading(false);
     }
