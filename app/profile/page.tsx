@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "../hooks/useWallet"
+import { useEffect } from "react"
 
 // Mock user data
 const mockUser = {
@@ -25,12 +26,14 @@ const mockUser = {
 }
 
 export default function ProfilePage() {
-  const { account, isConnecting, error, isKeychainInstalled, connect, disconnect } = useWallet();
+  const { account, isConnecting, error } = useWallet();
+
 
   if(isConnecting){
     return <div>Connecting...</div>
   }
-  if (error) {
+
+  if(error){
     return <div>{error}</div>
   }
 

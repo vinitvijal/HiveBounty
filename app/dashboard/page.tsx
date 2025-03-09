@@ -64,13 +64,53 @@ const mockBounties = [
     amount: 200,
     status: "open",
   },
+  {
+    id: 4,
+    title: "Fix mobile responsiveness",
+    repo: "acme/website",
+    owner: "acme",
+    issueNumber: 234,
+    language: "CSS",
+    amount: 100,
+    status: "open",
+  },
+  {
+    id: 5,
+    title: "Add unit tests for auth module",
+    repo: "acme/auth-service",
+    owner: "acme",
+    issueNumber: 567,
+    language: "JavaScript",
+    amount: 200,
+    status: "open",
+  },
+  {
+    id: 4,
+    title: "Fix mobile responsiveness",
+    repo: "acme/website",
+    owner: "acme",
+    issueNumber: 234,
+    language: "CSS",
+    amount: 100,
+    status: "open",
+  },
+  {
+    id: 5,
+    title: "Add unit tests for auth module",
+    repo: "acme/auth-service",
+    owner: "acme",
+    issueNumber: 567,
+    language: "JavaScript",
+    amount: 200,
+    status: "open",
+  },
 ]
 
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const { account } = useWallet();
-  // const Router = useRouter()
+  const { account, disconnect, isConnecting } = useWallet();
+  const Router = useRouter()
   const filteredBounties = mockBounties.filter(
     (bounty) =>
       bounty.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -78,6 +118,12 @@ export default function DashboardPage() {
       bounty.language.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
+  useEffect(() => {
+    if (isConnecting) return
+    if (!account) {
+      Router.push("/login")
+    }
+  }, [account, isConnecting])
   
   return (
     <div className="flex flex-col min-h-screen ">
@@ -93,7 +139,7 @@ export default function DashboardPage() {
                 Profile
               </Button>
             </Link>
-              {account && <Button variant="outline" size="sm">
+              {account && <Button variant="outline" size="sm" onClick={disconnect}>
                 <Wallet className="mr-2 h-4 w-4" />
                 <span>Connected as @{account.name}</span>
               </Button>}
