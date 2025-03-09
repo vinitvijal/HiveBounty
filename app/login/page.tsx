@@ -4,12 +4,12 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Github, Wallet } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "../hooks/useWallet"
 import { Input } from "@/components/ui/input"
+import { SignIn } from "../lib/auth-next"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -33,12 +33,9 @@ export default function LoginPage() {
   }, [account])
 
   const handleGithubLogin = async () => {
-    setIsGithubConnecting(true)
-    // Simulate GitHub OAuth
-    setTimeout(() => {
-      setIsGithubConnecting(false)
-      router.push("/dashboard")
-    }, 1500)
+
+    SignIn()
+  
   }
 
   return (
@@ -92,7 +89,7 @@ export default function LoginPage() {
                   <Button
                     className="w-full"
                     variant="outline"
-                    onClick={handleGithubLogin}
+                    onClick={() => handleGithubLogin()}
                     disabled={isGithubConnecting}
                   >
                     <Github className="mr-2 h-4 w-4" />
