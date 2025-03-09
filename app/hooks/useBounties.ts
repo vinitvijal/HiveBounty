@@ -1,10 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { client } from '../config/hive.config';
 import { Bounty } from '../types/hive.types';
 import { sendHiveTokens } from '../utils/hive';
 
 export const useBounties = () => {
-  const [bounties, setBounties] = useState<Bounty[]>([]);
+  const [bounties, setBounties] = useState<({
+    id: any;
+    title: any;
+    description: any;
+    amount: any;
+    currency: any;
+    creator: any;
+    status: any;
+    created_at: any;
+    deadline: any;
+} | null)[]>([]);
+  
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,6 +46,7 @@ export const useBounties = () => {
           }
           return null;
         } catch (err) {
+          console.log(err)
           return null;
         }
       }).filter(Boolean);

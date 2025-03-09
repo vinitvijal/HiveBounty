@@ -3,7 +3,6 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Wallet } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -18,6 +17,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { useBounties } from "@/app/hooks/useBounties"
+import { getIssueData, parseGitHubUrl } from "@/app/utils/github"
 
 interface CreateBountyModalProps {
   open: boolean
@@ -25,7 +26,9 @@ interface CreateBountyModalProps {
 }
 
 export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps) {
-  const router = useRouter()
+  const { createBounty } = useBounties();
+
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     issueUrl: "",
@@ -41,13 +44,39 @@ export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    console.log(e)
 
-    // Simulate API call to create bounty
-    setTimeout(() => {
+    // https://github.com/vinitvijal/Habilite-Next-Project/issues/204 parse into owner, repo, number
+    const data = parseGitHubUrl(formData.issueUrl);
+    if (!data) {
+      alert("Invalid GitHub issue URL")
       setIsSubmitting(false)
+      return
+    }
+    const { owner, repo, number } = data;
+    if (!owner || !repo || !number) {
+      alert("Invalid GitHub issue URL")
+      setIsSubmitting(false)
+      return
+    }
+
+    console.log(owner, repo, number)
+    const issueData = await getIssueData(owner, repo, number);
+    if (!issueData) {
+      alert("Invalid GitHub issue URL")
+      setIsSubmitting(false)
+      return
+    }
+
+    console.log(issueData)
+
+
+
+    // setTimeout(() => {
+    //   setIsSubmitting(false)
       onOpenChange(false)
-      router.push("/dashboard")
-    }, 1500)
+    //   router.push("/dashboard")
+    // }, 1500)
   }
 
   return (
@@ -88,7 +117,6 @@ export function CreateBountyModal({ open, onOpenChange }: CreateBountyModalProps
                   value={formData.amount}
                   onChange={handleChange}
                   required
-                  min="1"
                 />
               </div>
               <p className="text-xs text-muted-foreground">

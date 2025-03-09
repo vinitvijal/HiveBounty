@@ -10,7 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWallet } from "../hooks/useWallet"
 import { Input } from "@/components/ui/input"
 import { Auth, SignIn } from "../lib/auth-next"
-import { auth } from "@/auth"
 import { Session } from "next-auth"
 
 export default function LoginPage() {
