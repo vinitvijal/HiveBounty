@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { use, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Check, Code2, ExternalLink, Github, History, User, Wallet } from "lucide-react"
@@ -36,7 +36,8 @@ const mockBounty = {
   ],
 }
 
-export default function BountyDetailPage({ params }: { params: { id: string } }) {
+export default function BountyDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const router = useRouter()
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
 
@@ -264,7 +265,7 @@ export default function BountyDetailPage({ params }: { params: { id: string } })
           </div>
         </div>
       </main>
-      <ClaimBountyModal open={isClaimModalOpen} onOpenChange={setIsClaimModalOpen} bountyId={params.id} />
+      <ClaimBountyModal open={isClaimModalOpen} onOpenChange={setIsClaimModalOpen} bountyId={id} />
     </div>
   )
 }
