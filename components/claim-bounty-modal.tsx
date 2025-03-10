@@ -44,6 +44,10 @@ export function ClaimBountyModal({ open, onOpenChange, issueData}: ClaimBountyMo
       alert("Please login to claim the bounty")
       return
     }
+    if(issueData.claimedStatus === "solved"){
+      alert("The bounty has already been claimed.")
+      return
+    }
     setIsSubmitting(true)
     console.log(issueData)
     const email = await getEmailById(issueData.userId)
@@ -150,8 +154,8 @@ export function ClaimBountyModal({ open, onOpenChange, issueData}: ClaimBountyMo
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleClaim} disabled={isSubmitting || !session}>
-            {isSubmitting ? "Processing..." : "Claim Bounty"}
+          <Button onClick={handleClaim} disabled={isSubmitting || !session || issueData.claimedStatus === "solved"}>
+            {isSubmitting ? "Processing..." :  issueData.claimedStatus === "solved" ? "Already Claimed" : "Claim Bounty"}
           </Button>
         </DialogFooter>
       </DialogContent>

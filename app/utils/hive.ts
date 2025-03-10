@@ -152,6 +152,10 @@ export const claimHiveTokens = async (
   if (!isKeychainInstalled()) {
     return { success: false, message: "Please install Hive Keychain", txId: '' };
   }
+  if(!to){
+    return { success: false, message: "Please connect your GitHub account to claim the bounty.", txId:
+    '' };
+  }
 
   console.log("Requesting transfer", to, issueId);
 
@@ -169,6 +173,16 @@ export const claimHiveTokens = async (
       console.error('Issue not found');
       return;
     }
+
+    if(issue.claimedStatus === "solved"){
+      return {
+        success: false,
+        message: "The bounty has already been claimed.",
+        txId: ''
+      }
+    }
+
+    
     transf.memo = `bounty-${issue.id}`;
     transf.amount = `${issue.amount} HIVE`;
 
