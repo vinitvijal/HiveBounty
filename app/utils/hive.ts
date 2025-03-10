@@ -1,5 +1,7 @@
 import { KeychainResponse, HiveAccount, TransactionResponse } from '../types/hive.types';
-import { APP_NAME, client } from '../config/hive.config';
+import { APP_NAME, client, CONTRACT_ACCOUNT, PRIVATE_KEY } from '../config/hive.config';
+import { getIssueById } from '../actions/github';
+import { Asset, PrivateKey } from '@hiveio/dhive';
 
 declare global {
   interface Window {
@@ -110,6 +112,7 @@ export const sendHiveTokens = async (
     return { success: false, message: "Please install Hive Keychain" };
   }
 
+  console.log("Requesting transfer", from, to, amount, memo);
   return new Promise((resolve) => {
     window.hive_keychain.requestTransfer(
       from,
@@ -118,6 +121,7 @@ export const sendHiveTokens = async (
       memo,
       'HIVE',
       (response: KeychainResponse) => {
+        console.log("Transfer response", response);
         if (response.success) {
           resolve({ 
             success: true, 
@@ -133,4 +137,83 @@ export const sendHiveTokens = async (
       }
     );
   });
+};
+
+
+
+
+
+
+// Send HIVE tokens
+export const claimHiveTokens = async (
+  to: string,
+  issueId: string,
+) => {
+  if (!isKeychainInstalled()) {
+    return { success: false, message: "Please install Hive Keychain", txId: '' };
+  }
+  if(!to){
+    return { success: false, message: "Please connect your GitHub account to claim the bounty.", txId:
+    '' };
+  }
+
+  console.log("Requesting transfer", to, issueId);
+
+  const transf: { from: string; to: string; amount: string | Asset; memo: string } = {
+    from: '',
+    to: '',
+    amount: '',
+    memo: ''
+  };
+    transf.from = CONTRACT_ACCOUNT;
+    transf.to = to;
+
+    const issue = await getIssueById(issueId);
+    if (!issue) {
+      console.error('Issue not found');
+      return;
+    }
+
+    if(issue.claimedStatus === "solved"){
+      return {
+        success: false,
+        message: "The bounty has already been claimed.",
+        txId: ''
+      }
+    }
+
+    
+    transf.memo = `bounty-${issue.id}`;
+    transf.amount = `${issue.amount} HIVE`;
+
+
+    console.log(transf)
+
+
+    const privateKey = PrivateKey.fromString(PRIVATE_KEY);
+
+  return client.broadcast.transfer(transf, privateKey).then(
+    function(result) {
+      console.log(result)
+        console.log(
+            'included in block: ' + result.block_num,
+            'expired: ' + result.expired
+        );
+
+        return {
+          success: true,
+          message: `Sent ${transf.amount} HIVE to @${to}`,
+          txId: result.id
+        }
+    },
+    function(error) {
+        console.error(error);
+        return {
+          success: false,
+          message: error.message || "Transfer failed",
+          txId: ''
+        }
+    }
+);
+
 };
