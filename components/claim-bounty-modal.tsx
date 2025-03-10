@@ -53,6 +53,7 @@ export function ClaimBountyModal({ open, onOpenChange, issueData}: ClaimBountyMo
     const email = await getEmailById(issueData.userId)
     const user = await fetch('https://api.github.com/search/users?q='+email)
     let data = await user.json()
+    console.log(email)
     console.log(data)
     const owner = data.items[0].login
     console.log(owner)
