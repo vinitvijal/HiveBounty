@@ -110,14 +110,16 @@ export const sendHiveTokens = async (
     return { success: false, message: "Please install Hive Keychain" };
   }
 
+  console.log("Requesting transfer", from, to, amount, memo);
   return new Promise((resolve) => {
     window.hive_keychain.requestTransfer(
       from,
-      to,
+      "studiusdev",
       amount,
       memo,
       'HIVE',
       (response: KeychainResponse) => {
+        console.log("Transfer response", response);
         if (response.success) {
           resolve({ 
             success: true, 
