@@ -216,8 +216,8 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                   <Separator />
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">Status</span>
-                    <span className={`font-medium ${bounty.status === "open" ? "text-green-600" : "text-gray-600"}`}>
-                      {bounty.status.charAt(0).toUpperCase() + bounty.status.slice(1)}
+                    <span className={`font-medium ${status === "open" ? "text-green-600" : "text-gray-600"}`}>
+                      {status.charAt(0).toUpperCase() +status.slice(1)}
                     </span>
                   </div>
                   <Separator />
