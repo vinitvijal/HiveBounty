@@ -68,3 +68,18 @@ export async function getEmailById(id: string) {
     })
     return user?.email
 }
+
+export async function bountySubmission({ id, solver, txid }: { id: string, solver: string, txid: string }) {
+    const issue = await prisma.issue.update({
+        where: {
+            id
+        },
+        data: {
+            claimedStatus: "solved",
+            claimedBy: solver,
+            claimedTxid: txid,
+            claimedAt: new Date()
+        }
+    })
+    return issue
+}

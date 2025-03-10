@@ -18,7 +18,7 @@ import { Separator } from "@/components/ui/separator"
 import { Session } from "next-auth"
 import { Auth } from "@/app/lib/auth-next"
 import { Issue } from "@prisma/client"
-import { getEmailById } from "@/app/actions/github"
+import { bountySubmission, getEmailById } from "@/app/actions/github"
 import { claimHiveTokens } from "@/app/utils/hive"
 
 interface ClaimBountyModalProps {
@@ -63,7 +63,10 @@ export function ClaimBountyModal({ open, onOpenChange, issueData}: ClaimBountyMo
           alert("Please connect your GitHub account to claim the bounty.");
           return;
         }
-        claimHiveTokens(claimaintId, issueData.id)
+        const res = await claimHiveTokens(claimaintId, issueData.id)
+        if(res?.success){
+          await bountySubmission({ id: issueData.id, solver: claimaintId, txid: res.txId})
+        }
         alert("You have successfully claimed the bounty!");
       } else {
         alert("You are not the contributor who closed this issue.");

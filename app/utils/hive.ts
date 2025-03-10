@@ -150,7 +150,7 @@ export const claimHiveTokens = async (
   issueId: string,
 ) => {
   if (!isKeychainInstalled()) {
-    return { success: false, message: "Please install Hive Keychain" };
+    return { success: false, message: "Please install Hive Keychain", txId: '' };
   }
 
   console.log("Requesting transfer", to, issueId);
@@ -178,23 +178,26 @@ export const claimHiveTokens = async (
 
     const privateKey = PrivateKey.fromString(PRIVATE_KEY);
 
-  client.broadcast.transfer(transf, privateKey).then(
+  return client.broadcast.transfer(transf, privateKey).then(
     function(result) {
       console.log(result)
         console.log(
             'included in block: ' + result.block_num,
             'expired: ' + result.expired
         );
+
         return {
           success: true,
           message: `Sent ${transf.amount} HIVE to @${to}`,
+          txId: result.id
         }
     },
     function(error) {
         console.error(error);
         return {
           success: false,
-          message: error.message || "Transfer failed"
+          message: error.message || "Transfer failed",
+          txId: ''
         }
     }
 );
