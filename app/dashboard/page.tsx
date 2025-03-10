@@ -178,9 +178,12 @@ export default function DashboardPage() {
                         <Wallet className="h-4 w-4 text-primary" />
                         <span className="font-medium">{bounty.amount} HIVE</span>
                       </div>
-                      <Button size="sm" variant="secondary">
+                      {bounty.claimedStatus === 'solved' ?
+                      (<Button size="sm" variant="destructive">
+                        Already Claimed
+                      </Button>) : (<Button size="sm" variant="secondary">
                         View
-                      </Button>
+                      </Button>)}
                     </CardFooter>
                   </Card>
                 </Link>
