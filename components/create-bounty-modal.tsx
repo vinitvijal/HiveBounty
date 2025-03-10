@@ -22,6 +22,7 @@ import { Session } from "next-auth"
 import { BountyContract } from "@/app/contracts/bounty.contract"
 import { Auth } from "@/app/lib/auth-next"
 import { toast } from "sonner"
+import { createIssue } from "@/app/actions/github"
   
 interface CreateBountyModalProps {
   open: boolean
@@ -49,7 +50,7 @@ export function CreateBountyModal({ open, onOpenChange, accountName }: CreateBou
     setIsSubmitting(true)
     console.log(e)
 
-    if (!session){
+    if (!session || !session.user || !session.user.id) {
       alert("Please login to create a bounty")
       setIsSubmitting(false)
       return
@@ -87,8 +88,13 @@ export function CreateBountyModal({ open, onOpenChange, accountName }: CreateBou
       return
     }
 
-    const lang = await fetch(`https://api.github.com/repos/${owner}/${repo}/languages`).then(res => res.json()).then(data => data)
-    console.log(lang)
+    const langs = await fetch(`https://api.github.com/repos/${owner}/${repo}/languages`).then(res => res.json()).then(data => data)
+    console.log(langs)
+    // lang is {TypeScript: 129775, CSS: 4674, JavaScript: 474} and I want the name of Highest value
+    const langKeys = Object.keys(langs)
+    const langValues = Object.values(langs)
+    const langIndex = langValues.indexOf(Math.max(...langValues as number[]))
+    const lang = langKeys[langIndex]
 
 
 
@@ -109,8 +115,26 @@ export function CreateBountyModal({ open, onOpenChange, accountName }: CreateBou
 
 
 
-    if (response.success) {
+    if (response.success && response.txId) {
       toast.success('Bounty successfully created on Hive blockchain!\n Transaction ID: ' + response.txId);
+      const bounty = await createIssue({
+        userId: session.user.id,
+        title: issueData.title,
+        description: issueData.body,
+        url: formData.issueUrl,
+        language: lang,
+        repo: repo,
+        issueNumber: number,
+        amount: parseFloat(formData.amount),
+        status: 'open',
+        txid: response.txId
+      })
+
+      if (bounty) {
+        toast.success('Bounty successfully created on HiveBounty!');
+      }else{
+        toast.error('Failed to create bounty on HiveBounty!');
+      }
     } else {
       // setError(response.message);
       toast.error(response.message);

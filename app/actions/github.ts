@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-export async function createIssue({ userId, title, description, language, url, repo, issueNumber, amount, status }: { userId: string, title: string, description: string, url: string, language: string, repo: string, issueNumber: number, amount: number, status: string }) {
+export async function createIssue({ userId, title, description, language, url, repo, issueNumber, amount, status, txid }: { userId: string, title: string, description: string, url: string, language: string, repo: string, issueNumber: number, amount: number, status: string, txid: string }) {
     
     const existingIssue = await prisma.issue.findFirst({
         where: {
@@ -26,6 +26,7 @@ export async function createIssue({ userId, title, description, language, url, r
             issueNumber,
             amount,
             language,
+            txid,
             status
         }
     })
