@@ -17,30 +17,59 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Session } from "next-auth"
 import { Auth } from "@/app/lib/auth-next"
+import { Issue } from "@prisma/client"
+import { getEmailById } from "@/app/actions/github"
 
 interface ClaimBountyModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   bountyId: string
+  issueData: Issue
 }
 
-export function ClaimBountyModal({ open, onOpenChange }: ClaimBountyModalProps) {
+export function ClaimBountyModal({ open, onOpenChange, issueData}: ClaimBountyModalProps) {
   const router = useRouter()
   const [session, setSession] = useState<Session | null>()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [claimaintId, setClaimaintId] = useState<string | null>(null)
+
 
   const handleConnectGithub = () => {
     router.push("/login")
   }
 
   const handleClaim = async () => {
+    if (!session || !session.user || !session.user.id) {
+      alert("Please login to claim the bounty")
+      return
+    }
     setIsSubmitting(true)
+    console.log(issueData)
+    const email = await getEmailById(issueData.userId)
+    const user = await fetch('https://api.github.com/search/users?q='+email)
+    let data = await user.json()
+    const owner = data.items[0].login
+    const issue = await fetch('https://api.github.com/repos/'+owner+'/'+issueData.repo+'/issues/'+issueData.issueNumber+'/timeline')
+    data = await issue.json()
+    console.log(data)
 
-    // Simulate API call to claim bounty
+    const closedEventIndex = data.findIndex((event: { event: string; actor: { login: string } }) => event.event === "closed");
+    if (closedEventIndex > 0) {
+      const previousEvent = data[closedEventIndex - 1];
+      if (previousEvent.actor.login === claimaintId) {
+        // transfer bounty to the claimaint
+        alert("You have successfully claimed the bounty!");
+      } else {
+        alert("You are not the contributor who closed this issue.");
+      }
+    } else {
+      alert("No closed event found in the issue timeline.");
+    }
+
     setTimeout(() => {
       setIsSubmitting(false)
       onOpenChange(false)
-      router.push("/profile")
+      // router.push("/profile")
     }, 2000)
   }
 
@@ -48,6 +77,12 @@ export function ClaimBountyModal({ open, onOpenChange }: ClaimBountyModalProps) 
     async function getSession() {
       const session = await Auth()
       setSession(session)
+      if(session){
+        const user = await fetch('https://api.github.com/search/users?q='+session.user?.email)
+        const data = await user.json()
+        console.log(data.items[0].login)
+        setClaimaintId(data.items[0].login)
+      }
     }
     getSession()
   }

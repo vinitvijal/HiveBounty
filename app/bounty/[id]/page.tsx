@@ -281,7 +281,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
           </div>
         </div>
       </main>
-      <ClaimBountyModal open={isClaimModalOpen} onOpenChange={setIsClaimModalOpen} bountyId={id} />
+      <ClaimBountyModal open={isClaimModalOpen} onOpenChange={setIsClaimModalOpen} issueData={bounty} bountyId={id} />
     </div>
   )
 }

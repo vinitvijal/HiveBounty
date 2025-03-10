@@ -59,3 +59,12 @@ export async function updateIssueStatus(id: string, status: string) {
     })
     return issue
 }
+
+export async function getEmailById(id: string) {
+    const user = await prisma.user.findUnique({
+        where: {
+            id
+        }
+    })
+    return user?.email
+}
