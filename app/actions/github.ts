@@ -38,3 +38,24 @@ export async function getIssues() {
     const issues = await prisma.issue.findMany()
     return issues
 }
+
+export async function getIssueById(id: string) {
+    const issue = await prisma.issue.findUnique({
+        where: {
+            id
+        }
+    })
+    return issue
+}
+
+export async function updateIssueStatus(id: string, status: string) {
+    const issue = await prisma.issue.update({
+        where: {
+            id
+        },
+        data: {
+            status
+        }
+    })
+    return issue
+}

@@ -1,48 +1,64 @@
 "use client"
 
-import { use, useState } from "react"
+import { use, useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Check, Code2, ExternalLink, Github, History, User, Wallet } from "lucide-react"
+import { ArrowLeft, Check, Code2, ExternalLink, Github, Wallet } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ClaimBountyModal } from "@/components/claim-bounty-modal"
-
+import { Issue } from "@prisma/client"
+import { getIssueById, updateIssueStatus } from "@/app/actions/github"
+import { parseGitHubUrl } from "@/app/utils/github"
 // Mock data for a single bounty
-const mockBounty = {
-  id: 1,
-  title: "Fix pagination in user dashboard",
-  repo: "acme/dashboard",
-  owner: "acme",
-  issueNumber: 123,
-  language: "JavaScript",
-  amount: 250,
-  status: "closed", // or "open"
-  description:
-    "The pagination component in the user dashboard doesn't work correctly when there are more than 10 pages. We need to fix the logic to handle large datasets properly and ensure the UI remains responsive.",
-  url: "https://github.com/acme/dashboard/issues/123",
-  createdAt: "2025-02-15T12:00:00Z",
-  createdBy: "johndoe",
-  contributors: [
-    { username: "alice", commits: 3 },
-    { username: "bob", commits: 1 },
-  ],
-  transactions: [
-    { type: "create", amount: 250, date: "2025-02-15T12:00:00Z", from: "johndoe" },
-    { type: "claim", amount: 250, date: "2025-03-01T15:30:00Z", to: "alice", status: "pending" },
-  ],
-}
+
 
 export default function BountyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter()
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
-
+  const [bounty, setBounty] = useState<Issue | null>()
   // In a real app, we would fetch the bounty data based on the ID
-  const bounty = mockBounty
+  // const bounty = mockBounty
+  const [status, setStatus] = useState("open")
+
+  useEffect(() => {
+    async function getBounty() {
+      const response = await getIssueById(id)
+      setBounty(response)
+
+      if (response?.status === "closed"){
+        setStatus("closed")
+        return
+      }
+
+      const url = response?.url
+      if (!url) return
+      const parse = parseGitHubUrl(url)
+      if (!parse) return
+      const { owner, repo, number } = parse
+
+      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues/${number}`)
+      const data = await res.json()
+      console.log(data)
+      setStatus(data.state)
+      if (data.state === "closed"){
+        // setStatus("closed")
+        await updateIssueStatus(id, "closed")
+      }
+    }
+
+    getBounty()
+  }, [id])
+
+  if (!bounty) {
+    return <div 
+      className="flex items-center justify-center h-screen animate-pulse"
+    >Loading...</div>
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -84,12 +100,12 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                   <span className="text-xs">#{bounty.issueNumber}</span>
                   <span
                     className={`text-xs px-2 py-1 rounded ${
-                      bounty.status === "open"
+                      status === "open"
                         ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
                         : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
                     }`}
                   >
-                    {bounty.status.charAt(0).toUpperCase() + bounty.status.slice(1)}
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
                   </span>
                 </div>
                 <CardTitle className="text-2xl">{bounty.title}</CardTitle>
@@ -120,7 +136,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                     </div>
                   </div>
 
-                  {bounty.status === "closed" && (
+                  {status === "closed" && (
                     <div className="pt-4">
                       <Button className="w-full" onClick={() => setIsClaimModalOpen(true)}>
                         <Check className="mr-2 h-4 w-4" /> Claim Bounty
@@ -142,7 +158,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                     <CardTitle className="text-lg">Contributors</CardTitle>
                     <CardDescription>Developers who have contributed to this issue</CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  {/* <CardContent>
                     {bounty.contributors.length > 0 ? (
                       <div className="space-y-4">
                         {bounty.contributors.map((contributor) => (
@@ -166,7 +182,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                     ) : (
                       <p className="text-muted-foreground">No contributors yet</p>
                     )}
-                  </CardContent>
+                  </CardContent> */}
                 </Card>
               </TabsContent>
               <TabsContent value="transactions" className="mt-4">
@@ -175,7 +191,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                     <CardTitle className="text-lg">Transaction History</CardTitle>
                     <CardDescription>All transactions related to this bounty</CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  {/* <CardContent>
                     {bounty.transactions.length > 0 ? (
                       <div className="space-y-4">
                         {bounty.transactions.map((transaction, index) => (
@@ -210,7 +226,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                     ) : (
                       <p className="text-muted-foreground">No transactions yet</p>
                     )}
-                  </CardContent>
+                  </CardContent> */}
                 </Card>
               </TabsContent>
             </Tabs>
@@ -225,7 +241,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">Created by</span>
-                    <span className="font-medium">{bounty.createdBy}</span>
+                    <span className="font-medium">{bounty.userId}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between">

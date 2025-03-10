@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Check, Github, Wallet } from "lucide-react"
 
@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { Session } from "next-auth"
+import { Auth } from "@/app/lib/auth-next"
 
 interface ClaimBountyModalProps {
   open: boolean
@@ -24,14 +26,11 @@ interface ClaimBountyModalProps {
 
 export function ClaimBountyModal({ open, onOpenChange }: ClaimBountyModalProps) {
   const router = useRouter()
+  const [session, setSession] = useState<Session | null>()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isGithubConnected, setIsGithubConnected] = useState(true)
 
   const handleConnectGithub = () => {
-    // Simulate GitHub connection
-    setTimeout(() => {
-      setIsGithubConnected(true)
-    }, 1000)
+    router.push("/login")
   }
 
   const handleClaim = async () => {
@@ -44,6 +43,15 @@ export function ClaimBountyModal({ open, onOpenChange }: ClaimBountyModalProps) 
       router.push("/profile")
     }, 2000)
   }
+
+  useEffect(() => {
+    async function getSession() {
+      const session = await Auth()
+      setSession(session)
+    }
+    getSession()
+  }
+  ,[])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -59,7 +67,7 @@ export function ClaimBountyModal({ open, onOpenChange }: ClaimBountyModalProps) 
                 <Github className="h-5 w-5" />
                 <Label>GitHub Account</Label>
               </div>
-              {isGithubConnected ? (
+              {session ? (
                 <div className="flex items-center gap-1 text-green-600">
                   <Check className="h-4 w-4" />
                   <span className="text-sm font-medium">Connected</span>
@@ -98,7 +106,7 @@ export function ClaimBountyModal({ open, onOpenChange }: ClaimBountyModalProps) 
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleClaim} disabled={isSubmitting || !isGithubConnected}>
+          <Button onClick={handleClaim} disabled={isSubmitting || !session}>
             {isSubmitting ? "Processing..." : "Claim Bounty"}
           </Button>
         </DialogFooter>
