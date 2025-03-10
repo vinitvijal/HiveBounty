@@ -1,5 +1,7 @@
 import { KeychainResponse, HiveAccount, TransactionResponse } from '../types/hive.types';
-import { APP_NAME, client } from '../config/hive.config';
+import { APP_NAME, client, CONTRACT_ACCOUNT, PRIVATE_KEY } from '../config/hive.config';
+import { getIssueById } from '../actions/github';
+import { Asset, PrivateKey } from '@hiveio/dhive';
 
 declare global {
   interface Window {
@@ -135,4 +137,66 @@ export const sendHiveTokens = async (
       }
     );
   });
+};
+
+
+
+
+
+
+// Send HIVE tokens
+export const claimHiveTokens = async (
+  to: string,
+  issueId: string,
+) => {
+  if (!isKeychainInstalled()) {
+    return { success: false, message: "Please install Hive Keychain" };
+  }
+
+  console.log("Requesting transfer", to, issueId);
+
+  const transf: { from: string; to: string; amount: string | Asset; memo: string } = {
+    from: '',
+    to: '',
+    amount: '',
+    memo: ''
+  };
+    transf.from = CONTRACT_ACCOUNT;
+    transf.to = to;
+
+    const issue = await getIssueById(issueId);
+    if (!issue) {
+      console.error('Issue not found');
+      return;
+    }
+    transf.memo = `bounty-${issue.id}`;
+    transf.amount = `${issue.amount} HIVE`;
+
+
+    console.log(transf)
+
+
+    const privateKey = PrivateKey.fromString(PRIVATE_KEY);
+
+  client.broadcast.transfer(transf, privateKey).then(
+    function(result) {
+      console.log(result)
+        console.log(
+            'included in block: ' + result.block_num,
+            'expired: ' + result.expired
+        );
+        return {
+          success: true,
+          message: `Sent ${transf.amount} HIVE to @${to}`,
+        }
+    },
+    function(error) {
+        console.error(error);
+        return {
+          success: false,
+          message: error.message || "Transfer failed"
+        }
+    }
+);
+
 };

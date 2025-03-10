@@ -19,6 +19,7 @@ import { Session } from "next-auth"
 import { Auth } from "@/app/lib/auth-next"
 import { Issue } from "@prisma/client"
 import { getEmailById } from "@/app/actions/github"
+import { claimHiveTokens } from "@/app/utils/hive"
 
 interface ClaimBountyModalProps {
   open: boolean
@@ -58,6 +59,11 @@ export function ClaimBountyModal({ open, onOpenChange, issueData}: ClaimBountyMo
       const previousEvent = data[closedEventIndex - 1];
       if (previousEvent.actor.login === claimaintId) {
         // transfer bounty to the claimaint
+        if(!claimaintId){
+          alert("Please connect your GitHub account to claim the bounty.");
+          return;
+        }
+        claimHiveTokens(claimaintId, issueData.id)
         alert("You have successfully claimed the bounty!");
       } else {
         alert("You are not the contributor who closed this issue.");
