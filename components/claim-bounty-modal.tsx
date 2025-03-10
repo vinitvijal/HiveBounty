@@ -57,7 +57,7 @@ export function ClaimBountyModal({ open, onOpenChange, issueData}: ClaimBountyMo
     console.log(data)
     const owner = data.items[0].login
     console.log(owner)
-    const issue = await fetch('https://api.github.com/repos/'+owner+'/'+issueData.repo+'/issues/'+issueData.issueNumber+'/timeline')
+    const issue = await fetch(issueData.url+'/timeline')
     data = await issue.json()
     console.log(data)
 
