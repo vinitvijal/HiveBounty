@@ -20,6 +20,7 @@ import { Auth } from "@/app/lib/auth-next"
 import { Issue } from "@prisma/client"
 import { bountySubmission, getEmailById } from "@/app/actions/github"
 import { claimHiveTokens } from "@/app/utils/hive"
+import { parseGitHubUrl } from "@/app/utils/github"
 
 interface ClaimBountyModalProps {
   open: boolean
@@ -52,7 +53,13 @@ export function ClaimBountyModal({ open, onOpenChange, issueData}: ClaimBountyMo
     console.log(issueData)
     const email = await getEmailById(issueData.userId)
     console.log(email)
-    const issue = await fetch(issueData.url+'/timeline')
+    const res = parseGitHubUrl(issueData.url)
+    if(!res){
+      alert("Invalid GitHub URL")
+      return
+    }
+    const { owner, repo, number} = res
+    const issue = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues/${number}/timeline`)
     const  data = await issue.json()
     console.log(data)
 
