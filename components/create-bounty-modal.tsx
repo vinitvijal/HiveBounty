@@ -120,7 +120,7 @@ export function CreateBountyModal({ open, onOpenChange, accountName }: CreateBou
       const bounty = await createIssue({
         userId: session.user.id,
         title: issueData.title,
-        description: issueData.body,
+        description: issueData.body || "",
         url: formData.issueUrl,
         language: lang,
         repo: repo,
