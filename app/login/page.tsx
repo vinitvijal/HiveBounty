@@ -132,7 +132,7 @@ export default function LoginPage() {
           </Link>{" "}
           and{" "}
           <Link href="#" className="underline underline-offset-4 hover:text-primary">
-            Privacy Policy
+            Privacy Policy v1.0
           </Link>
           .
         </p>
