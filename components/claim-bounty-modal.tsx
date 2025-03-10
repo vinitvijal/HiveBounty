@@ -51,14 +51,9 @@ export function ClaimBountyModal({ open, onOpenChange, issueData}: ClaimBountyMo
     setIsSubmitting(true)
     console.log(issueData)
     const email = await getEmailById(issueData.userId)
-    const user = await fetch('https://api.github.com/search/users?q='+email)
-    let data = await user.json()
     console.log(email)
-    console.log(data)
-    const owner = data.items[0].login
-    console.log(owner)
     const issue = await fetch(issueData.url+'/timeline')
-    data = await issue.json()
+    const  data = await issue.json()
     console.log(data)
 
     const closedEventIndex = data.findIndex((event: { event: string; actor: { login: string } }) => event.event === "closed");
