@@ -90,6 +90,13 @@ export function CreateBountyModal({ open, onOpenChange, accountName }: CreateBou
     const lang = await fetch(`https://api.github.com/repos/${owner}/${repo}/languages`).then(res => res.json()).then(data => data)
     console.log(lang)
 
+
+
+
+
+
+
+
     const bountyContract = new BountyContract(accountName);
     const response = await bountyContract.createBounty({
       title: issueData.title,
@@ -97,6 +104,7 @@ export function CreateBountyModal({ open, onOpenChange, accountName }: CreateBou
       githubLink: formData.issueUrl,
       prizePool: parseFloat(formData.amount)
     });
+
 
 
 

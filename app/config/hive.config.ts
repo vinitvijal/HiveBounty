@@ -12,7 +12,7 @@ export const client = new Client(HIVE_NODES);
 // App Constants from environment
 export const APP_NAME = process.env.APP_NAME;
 export const APP_TAG = process.env.APP_TAG;
-export const CONTRACT_ACCOUNT: string = process.env.CONTRACT_ACCOUNT || ''; 
+export const CONTRACT_ACCOUNT: string = process.env.NEXT_CONTRACT_ACCOUNT || ''; 
 export const CONTRACT_MEMO_PREFIX = 'bounty-';
 
 // Transaction Configuration
