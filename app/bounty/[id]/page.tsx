@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Check, Code2, ExternalLink, Github, Wallet } from "lucide-react"
+import { ArrowLeft, Check, Code2, ExternalLink, Github, History, Wallet } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -148,85 +148,50 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
             </Card>
 
             <Tabs defaultValue="contributors">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="contributors">Contributors</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-1">
                 <TabsTrigger value="transactions">Transactions</TabsTrigger>
               </TabsList>
-              <TabsContent value="contributors" className="mt-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Contributors</CardTitle>
-                    <CardDescription>Developers who have contributed to this issue</CardDescription>
-                  </CardHeader>
-                  {/* <CardContent>
-                    {bounty.contributors.length > 0 ? (
-                      <div className="space-y-4">
-                        {bounty.contributors.map((contributor) => (
-                          <div key={contributor.username} className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <User className="h-5 w-5" />
-                              <Link
-                                href={`https://github.com/${contributor.username}`}
-                                className="font-medium hover:underline"
-                                target="_blank"
-                              >
-                                {contributor.username}
-                              </Link>
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {contributor.commits} commit{contributor.commits !== 1 ? "s" : ""}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-muted-foreground">No contributors yet</p>
-                    )}
-                  </CardContent> */}
-                </Card>
-              </TabsContent>
               <TabsContent value="transactions" className="mt-4">
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">Transaction History</CardTitle>
                     <CardDescription>All transactions related to this bounty</CardDescription>
                   </CardHeader>
-                  {/* <CardContent>
-                    {bounty.transactions.length > 0 ? (
+                  <CardContent>
+                    {bounty.claimedTxid ? (
                       <div className="space-y-4">
-                        {bounty.transactions.map((transaction, index) => (
-                          <div key={index} className="flex items-center justify-between">
+                       
+                          <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <History className="h-5 w-5" />
                               <div>
                                 <p className="font-medium">
-                                  {transaction.type === "create" ? "Bounty Created" : "Bounty Claimed"}
+                                  Bounty Claimed
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                  {transaction.type === "create"
-                                    ? `From: ${transaction.from}`
-                                    : `To: ${transaction.to}`}
+                                  
+                                   To: {bounty.claimedBy}
                                 </p>
                               </div>
                             </div>
                             <div className="text-right">
-                              <p className="font-medium">{transaction.amount} HIVE</p>
+                              <p className="font-medium">{bounty.amount} HIVE</p>
                               <p className="text-xs text-muted-foreground">
-                                {new Date(transaction.date).toLocaleDateString()}
+                                {bounty.claimedAt && bounty.claimedAt.toLocaleDateString()}
                               </p>
-                              {transaction.status && (
+                              {bounty.claimedTxid && (
                                 <span className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 px-2 py-1 rounded">
-                                  {transaction.status}
+                                  Txn ID: {bounty.claimedTxid}
                                 </span>
                               )}
                             </div>
                           </div>
-                        ))}
+                        
                       </div>
                     ) : (
                       <p className="text-muted-foreground">No transactions yet</p>
                     )}
-                  </CardContent> */}
+                  </CardContent>
                 </Card>
               </TabsContent>
             </Tabs>

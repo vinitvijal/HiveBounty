@@ -142,7 +142,7 @@ export function ClaimBountyModal({ open, onOpenChange, issueData}: ClaimBountyMo
               <Label>Reward</Label>
               <div className="flex items-center gap-2">
                 <Wallet className="h-5 w-5 text-primary" />
-                <span className="font-medium">250 HIVE</span>
+                <span className="font-medium">{issueData.amount} HIVE</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 The reward will be transferred to your Hive wallet once your contribution is verified.
