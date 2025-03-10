@@ -114,7 +114,7 @@ export const sendHiveTokens = async (
   return new Promise((resolve) => {
     window.hive_keychain.requestTransfer(
       from,
-      "studiusdev",
+      to,
       amount,
       memo,
       'HIVE',

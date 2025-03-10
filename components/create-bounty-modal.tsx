@@ -110,15 +110,13 @@ export function CreateBountyModal({ open, onOpenChange, accountName }: CreateBou
 
 
     if (response.success) {
-      toast.success('Bounty successfully created on Hive blockchain!');
+      toast.success('Bounty successfully created on Hive blockchain!\n Transaction ID: ' + response.txId);
     } else {
       // setError(response.message);
       toast.error(response.message);
     }
  
     console.log(response)
-
-
 
       setIsSubmitting(false)
       onOpenChange(false)
