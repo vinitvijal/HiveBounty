@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input"
 import { Session } from "next-auth"
 import { Auth, SignIn, SignOut } from "../lib/auth-next"
 import { useRouter } from "next/navigation"
+import { Issue } from "@prisma/client"
+import { getClaimsByUser } from "../actions/github"
 
 // Mock user data
 const mockUser = {
@@ -35,6 +37,8 @@ export default function ProfilePage() {
   const { account, connect, isConnecting, isKeychainInstalled, disconnect } = useWallet();
   const [username, setUsername] = useState('');
   const [session, setSession] = useState<Session | null>()
+  const [userId, setUserId] = useState<string | null>()
+  const [transactions, setTransactions] = useState<Issue[]>([])
   const router = useRouter()
 
   const getLoggedOut = () => {
@@ -58,6 +62,13 @@ export default function ProfilePage() {
   async function getSession(){
     const session = await Auth()
     setSession(session)
+    const email = session?.user?.email
+    const user = await fetch('https://api.github.com/search/users?q='+email)
+    const data = await user.json()
+    const owner = data.items[0].login
+    setUserId(owner);
+    const trans = await getClaimsByUser(owner);
+    setTransactions(trans)
   }
 
   useEffect(()=>{
@@ -164,11 +175,12 @@ export default function ProfilePage() {
                       <span className="text-sm">GitHub</span>
                     </div>
                     {session ? <Link
-                      href={`https://github.com/${'vinitvijal'}`}
+                      href={`https://github.com/${userId}`}
                       className="font-medium flex gap-2 hover:underline"
                       target="_blank"
                     >
-                      {session.user?.id} <CheckCheck color="green" />
+                      {userId
+                      } <CheckCheck color="green" />
                     </Link> : <span className="font-medium">Not connected </span>}
                   </div>
                   <Separator />
@@ -234,30 +246,31 @@ export default function ProfilePage() {
                     <CardDescription>Your recent transactions on the platform</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {mockUser.transactions.length > 0 ? (
+                    {transactions.length > 0 ? (
                       <div className="space-y-4">
-                        {mockUser.transactions.map((transaction, index) => (
+                        {transactions.map((transaction, index) => (
                           <div key={index} className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <History className="h-5 w-5" />
                               <div>
                                 <p className="font-medium">
-                                  {transaction.type === "create" ? "Bounty Created" : "Bounty Claimed"}
+                                   Bounty Claimed
                                 </p>
-                                <p className="text-sm text-muted-foreground">{transaction.bountyTitle}</p>
+                                <p className="text-sm text-muted-foreground">{transaction.title}</p>
                               </div>
                             </div>
                             <div className="text-right">
                               <p
                                 className={`font-medium ${
-                                  transaction.type === "create" ? "text-red-600" : "text-green-600"
+                                   "text-green-600"
                                 }`}
                               >
-                                {transaction.type === "create" ? "-" : "+"}
+                                {"+"}
                                 {transaction.amount} HIVE
                               </p>
                               <p className="text-xs text-muted-foreground">
-                                {new Date(transaction.date).toLocaleDateString()}
+                                {transaction.claimedAt &&
+                                (transaction.claimedAt).toLocaleDateString()}
                               </p>
                             </div>
                           </div>

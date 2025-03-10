@@ -83,3 +83,12 @@ export async function bountySubmission({ id, solver, txid }: { id: string, solve
     })
     return issue
 }
+
+export async function getClaimsByUser(userId: string) {
+    const claims = await prisma.issue.findMany({
+        where: {
+            claimedBy: userId
+        }
+    })
+    return claims
+}

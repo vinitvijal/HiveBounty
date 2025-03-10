@@ -147,7 +147,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
               </CardContent>
             </Card>
 
-            <Tabs defaultValue="contributors">
+            <Tabs defaultValue="transactions">
               <TabsList className="grid w-full grid-cols-1">
                 <TabsTrigger value="transactions">Transactions</TabsTrigger>
               </TabsList>
