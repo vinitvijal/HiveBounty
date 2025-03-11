@@ -61,8 +61,8 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="border-b">
+    <div className="flex flex-col min-h-screen justify-center">
+      <header className="border-b flex justify-center">
         <div className="container flex h-16 items-center justify-between px-4 md:px-6">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
             <Code2 className="h-6 w-6" />
@@ -83,6 +83,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
           </div>
         </div>
       </header>
+      <div className="flex justify-center">
       <main className="flex-1 container py-6 px-4 md:px-6">
         <Button variant="ghost" size="sm" className="mb-6" onClick={() => router.push("/dashboard")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -246,6 +247,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
           </div>
         </div>
       </main>
+      </div>
       <ClaimBountyModal open={isClaimModalOpen} onOpenChange={setIsClaimModalOpen} issueData={bounty} bountyId={id} />
     </div>
   )
