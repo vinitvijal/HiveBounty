@@ -13,7 +13,6 @@ import { ClaimBountyModal } from "@/components/claim-bounty-modal"
 import { Issue } from "@prisma/client"
 import { getIssueById, updateIssueStatus } from "@/app/actions/github"
 import { parseGitHubUrl } from "@/app/utils/github"
-// Mock data for a single bounty
 
 
 export default function BountyDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -21,8 +20,6 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
   const router = useRouter()
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
   const [bounty, setBounty] = useState<Issue | null>()
-  // In a real app, we would fetch the bounty data based on the ID
-  // const bounty = mockBounty
   const [status, setStatus] = useState("open")
 
   useEffect(() => {
