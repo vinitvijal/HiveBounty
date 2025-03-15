@@ -83,7 +83,7 @@ export default function DashboardPage() {
     (bounty) =>
       bounty.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       bounty.repo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      bounty.language.toLowerCase().includes(searchQuery.toLowerCase()),
+      bounty.language?.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
   useEffect(() => {

@@ -92,7 +92,7 @@ model Issue {
   issueNumber Int
   amount Float
   status String
-  language String
+  language String?
   txid String
   claimedBy String?
   claimedAt DateTime?
