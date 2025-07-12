@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
 import { ArrowRight, Check, Code2, Github, Wallet, Zap, Shield, Users, Trophy, ArrowUpRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -53,7 +52,7 @@ export default function Home() {
             <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80 w-fit mb-2">
-                  Open Source + Blockchain Rewards
+                  Open Source + Hive Blockchain Rewards
                 </div>
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400">
@@ -65,7 +64,7 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="/bounties">
+                  <Link href="/dashboard">
                     <Button className="gap-1 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700">
                       Explore Bounties <ArrowRight className="h-4 w-4" />
                     </Button>
@@ -379,20 +378,20 @@ export default function Home() {
                 {
                   quote:
                     "I've earned over 2,000 HIVE tokens by solving bounties in my spare time. It's a great way to contribute to open source while getting paid.",
-                  name: "Alex Johnson",
-                  role: "Full Stack Developer",
+                  name: "Sharma Anurag Umesh",
+                  role: "Blockchain Developer",
                 },
                 {
                   quote:
                     "As a project maintainer, HiveBounty has helped me attract talented developers to fix critical issues in our codebase quickly.",
-                  name: "Sarah Chen",
-                  role: "Project Lead at OpenDev",
+                  name: "Vineet",
+                  role: "SDE-1",
                 },
                 {
                   quote:
                     "The verification system ensures that only quality work gets rewarded. It's fair for everyone involved in the bounty process.",
-                  name: "Michael Rodriguez",
-                  role: "Blockchain Developer",
+                  name: "Vedant Amrit",
+                  role: "Frontend Developer",
                 },
               ].map((testimonial, i) => (
                 <Card key={i} className="relative overflow-hidden">
@@ -444,7 +443,7 @@ export default function Home() {
                 },
                 {
                   q: "What fees does HiveBounty charge?",
-                  a: "HiveBounty charges a small 3% fee on successful bounty claims to maintain the platform. This fee helps us improve the service and add new features.",
+                  a: "HiveBounty charges a small 2% fee on successful bounty claims to maintain the platform. This fee helps us improve the service and add new features.",
                 },
                 {
                   q: "Can I work on multiple bounties at once?",
@@ -490,7 +489,7 @@ export default function Home() {
                         Get Started <ArrowRight className="h-4 w-4" />
                       </Button>
                     </Link>
-                    <Link href="/bounties">
+                    <Link href="/dashboard">
                       <Button variant="outline">Explore Bounties</Button>
                     </Link>
                   </div>
@@ -501,18 +500,18 @@ export default function Home() {
                     <div className="relative aspect-video rounded-lg overflow-hidden border bg-card">
                       <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 to-violet-100/50 dark:from-blue-950/50 dark:to-violet-950/50"></div>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Image
-                          src="/placeholder.svg?height=240&width=400"
+                        <img
+                          src="https://hive.io/opengraph.png"
                           alt="Platform preview"
                           width={400}
                           height={240}
-                          className="object-contain"
+                          className="object-cover h-full"
                         />
                       </div>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="h-16 w-16 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center cursor-pointer">
-                          <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-primary-foreground">
-                            <ArrowUpRight className="h-6 w-6" />
+                        <div className="h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center cursor-pointer">
+                          <div className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-primary-foreground">
+                            <ArrowUpRight className="h-3 w-3" />
                           </div>
                         </div>
                       </div>

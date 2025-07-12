@@ -10,75 +10,80 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CreateBountyModal } from "@/components/create-bounty-modal"
 import { useWallet } from "../hooks/useWallet"
+import { Issue } from "@prisma/client"
+import { getIssues } from "../actions/github"
 
 // Mock data for bounties
-const mockBounties = [
-  {
-    id: 1,
-    title: "Fix pagination in user dashboard",
-    repo: "vinitvijal/dashboard",
-    owner: "vinitvijal",
-    issueNumber: 123,
-    language: "JavaScript",
-    amount: 20,
-    status: "open",
-  },
-  {
-    id: 2,
-    title: "Implement dark mode toggle",
-    repo: "vinitvijal/ui-components",
-    owner: "vinitvijal",
-    issueNumber: 456,
-    language: "TypeScript",
-    amount: 10,
-    status: "open",
-  },
-  {
-    id: 3,
-    title: "Optimize database queries",
-    repo: "vinitvijal/backend-api",
-    owner: "vinitvijal",
-    issueNumber: 789,
-    language: "Python",
-    amount: 30,
-    status: "open",
-  },
-  {
-    id: 4,
-    title: "Fix mobile responsiveness",
-    repo: "vinitvijal/website",
-    owner: "vinitvijal",
-    issueNumber: 234,
-    language: "CSS",
-    amount: 10,
-    status: "open",
-  },
-  {
-    id: 5,
-    title: "Add unit tests for auth module",
-    repo: "vinitvijal/auth-service",
-    owner: "vinitvijal",
-    issueNumber: 567,
-    language: "JavaScript",
-    amount: 20,
-    status: "open",
-  },
-]
+// const Bounties = [
+//   {
+//     id: 1,
+//     title: "Fix pagination in user dashboard",
+//     repo: "vinitvijal/dashboard",
+//     owner: "vinitvijal",
+//     description: "The pagination in the user dashboard is not working as expected. The page numbers are not updating correctly.",
+//     issueNumber: 123,
+//     language: "JavaScript",
+//     amount: 20,
+//     status: "open",
+//   },
+//   {
+//     id: 2,
+//     title: "Implement dark mode toggle",
+//     repo: "vinitvijal/ui-components",
+//     owner: "vinitvijal",
+//     issueNumber: 456,
+//     language: "TypeScript",
+//     amount: 10,
+//     status: "open",
+//   },
+//   {
+//     id: 3,
+//     title: "Optimize database queries",
+//     repo: "vinitvijal/backend-api",
+//     owner: "vinitvijal",
+//     issueNumber: 789,
+//     language: "Python",
+//     amount: 30,
+//     status: "open",
+//   },
+//   {
+//     id: 4,
+//     title: "Fix mobile responsiveness",
+//     repo: "vinitvijal/website",
+//     owner: "vinitvijal",
+//     issueNumber: 234,
+//     language: "CSS",
+//     amount: 10,
+//     status: "open",
+//   },
+//   {
+//     id: 5,
+//     title: "Add unit tests for auth module",
+//     repo: "vinitvijal/auth-service",
+//     owner: "vinitvijal",
+//     issueNumber: 567,
+//     language: "JavaScript",
+//     amount: 20,
+//     status: "open",
+//   },
+// ]
+
 
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const { account, disconnect, isConnecting } = useWallet();
+  const [Bounties, setBounties] = useState<Issue[]>([])
   // const Router = useRouter()
 
 
 
 
-  const filteredBounties = mockBounties.filter(
+  const filteredBounties = Bounties.filter(
     (bounty) =>
       bounty.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       bounty.repo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      bounty.language.toLowerCase().includes(searchQuery.toLowerCase()),
+      bounty.language?.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
   useEffect(() => {
@@ -86,6 +91,11 @@ export default function DashboardPage() {
     if (!account) {
       // Router.push("/login")
     }
+    const fetchBounties = async () => {
+      const res = await getIssues()
+      setBounties(res)
+    }
+    fetchBounties()
   }, [account, isConnecting])
   
   return (
@@ -146,10 +156,10 @@ export default function DashboardPage() {
           </TabsList>
           <TabsContent value="all" className="mt-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredBounties.map((bounty) => (
+              {filteredBounties && filteredBounties.map((bounty) => (
                 <Link href={`/bounty/${bounty.id}`} key={bounty.id}>
                   <Card className="h-full hover:shadow-md transition-shadow">
-                    <CardHeader className="pb-3">
+                    <CardHeader className="pb-1">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 px-2 py-1 rounded">
                           {bounty.language}
@@ -159,17 +169,21 @@ export default function DashboardPage() {
                       <CardTitle className="text-lg">{bounty.title}</CardTitle>
                     </CardHeader>
                     <CardContent className="pb-2">
+                      <p className="text-sm pb-2">{bounty.description}</p>
                       <p className="text-sm text-muted-foreground">Repository: {bounty.repo}</p>
-                      <p className="text-sm text-muted-foreground">Owner: {bounty.owner}</p>
+                      <p className="text-sm text-muted-foreground">Owner: {bounty.id}</p>
                     </CardContent>
                     <CardFooter className="flex justify-between pt-3 border-t">
                       <div className="flex items-center gap-1">
                         <Wallet className="h-4 w-4 text-primary" />
                         <span className="font-medium">{bounty.amount} HIVE</span>
                       </div>
-                      <Button size="sm" variant="secondary">
+                      {bounty.claimedStatus === 'solved' ?
+                      (<Button size="sm" variant="destructive">
+                        Already Claimed
+                      </Button>) : (<Button size="sm" variant="secondary">
                         View
-                      </Button>
+                      </Button>)}
                     </CardFooter>
                   </Card>
                 </Link>

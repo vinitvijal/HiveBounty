@@ -1,52 +1,65 @@
 "use client"
 
-import { use, useState } from "react"
+import { use, useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Check, Code2, ExternalLink, Github, History, User, Wallet } from "lucide-react"
+import { ArrowLeft, Check, Code2, ExternalLink, Github, History, Wallet } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ClaimBountyModal } from "@/components/claim-bounty-modal"
+import { Issue } from "@prisma/client"
+import { getIssueById, updateIssueStatus } from "@/app/actions/github"
+import { parseGitHubUrl } from "@/app/utils/github"
 
-// Mock data for a single bounty
-const mockBounty = {
-  id: 1,
-  title: "Fix pagination in user dashboard",
-  repo: "acme/dashboard",
-  owner: "acme",
-  issueNumber: 123,
-  language: "JavaScript",
-  amount: 250,
-  status: "closed", // or "open"
-  description:
-    "The pagination component in the user dashboard doesn't work correctly when there are more than 10 pages. We need to fix the logic to handle large datasets properly and ensure the UI remains responsive.",
-  url: "https://github.com/acme/dashboard/issues/123",
-  createdAt: "2025-02-15T12:00:00Z",
-  createdBy: "johndoe",
-  contributors: [
-    { username: "alice", commits: 3 },
-    { username: "bob", commits: 1 },
-  ],
-  transactions: [
-    { type: "create", amount: 250, date: "2025-02-15T12:00:00Z", from: "johndoe" },
-    { type: "claim", amount: 250, date: "2025-03-01T15:30:00Z", to: "alice", status: "pending" },
-  ],
-}
 
 export default function BountyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter()
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false)
+  const [bounty, setBounty] = useState<Issue | null>()
+  const [status, setStatus] = useState("open")
 
-  // In a real app, we would fetch the bounty data based on the ID
-  const bounty = mockBounty
+  useEffect(() => {
+    async function getBounty() {
+      const response = await getIssueById(id)
+      setBounty(response)
+
+      if (response?.status === "closed"){
+        setStatus("closed")
+        return
+      }
+
+      const url = response?.url
+      if (!url) return
+      const parse = parseGitHubUrl(url)
+      if (!parse) return
+      const { owner, repo, number } = parse
+
+      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues/${number}`)
+      const data = await res.json()
+      console.log(data)
+      setStatus(data.state)
+      if (data.state === "closed"){
+        // setStatus("closed")
+        await updateIssueStatus(id, "closed")
+      }
+    }
+
+    getBounty()
+  }, [id])
+
+  if (!bounty) {
+    return <div 
+      className="flex items-center justify-center h-screen animate-pulse"
+    >Loading...</div>
+  }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="border-b">
+    <div className="flex flex-col min-h-screen justify-center">
+      <header className="border-b flex justify-center">
         <div className="container flex h-16 items-center justify-between px-4 md:px-6">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
             <Code2 className="h-6 w-6" />
@@ -67,6 +80,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
           </div>
         </div>
       </header>
+      <div className="flex justify-center">
       <main className="flex-1 container py-6 px-4 md:px-6">
         <Button variant="ghost" size="sm" className="mb-6" onClick={() => router.push("/dashboard")}>
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -84,12 +98,12 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                   <span className="text-xs">#{bounty.issueNumber}</span>
                   <span
                     className={`text-xs px-2 py-1 rounded ${
-                      bounty.status === "open"
+                      status === "open"
                         ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
                         : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
                     }`}
                   >
-                    {bounty.status.charAt(0).toUpperCase() + bounty.status.slice(1)}
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
                   </span>
                 </div>
                 <CardTitle className="text-2xl">{bounty.title}</CardTitle>
@@ -120,7 +134,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                     </div>
                   </div>
 
-                  {bounty.status === "closed" && (
+                  {status === "closed" && (
                     <div className="pt-4">
                       <Button className="w-full" onClick={() => setIsClaimModalOpen(true)}>
                         <Check className="mr-2 h-4 w-4" /> Claim Bounty
@@ -131,44 +145,10 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
               </CardContent>
             </Card>
 
-            <Tabs defaultValue="contributors">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="contributors">Contributors</TabsTrigger>
+            <Tabs defaultValue="transactions">
+              <TabsList className="grid w-full grid-cols-1">
                 <TabsTrigger value="transactions">Transactions</TabsTrigger>
               </TabsList>
-              <TabsContent value="contributors" className="mt-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Contributors</CardTitle>
-                    <CardDescription>Developers who have contributed to this issue</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {bounty.contributors.length > 0 ? (
-                      <div className="space-y-4">
-                        {bounty.contributors.map((contributor) => (
-                          <div key={contributor.username} className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <User className="h-5 w-5" />
-                              <Link
-                                href={`https://github.com/${contributor.username}`}
-                                className="font-medium hover:underline"
-                                target="_blank"
-                              >
-                                {contributor.username}
-                              </Link>
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {contributor.commits} commit{contributor.commits !== 1 ? "s" : ""}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-muted-foreground">No contributors yet</p>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
               <TabsContent value="transactions" className="mt-4">
                 <Card>
                   <CardHeader>
@@ -176,36 +156,35 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                     <CardDescription>All transactions related to this bounty</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {bounty.transactions.length > 0 ? (
+                    {bounty.claimedTxid ? (
                       <div className="space-y-4">
-                        {bounty.transactions.map((transaction, index) => (
-                          <div key={index} className="flex items-center justify-between">
+                       
+                          <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <History className="h-5 w-5" />
                               <div>
                                 <p className="font-medium">
-                                  {transaction.type === "create" ? "Bounty Created" : "Bounty Claimed"}
+                                  Bounty Claimed
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                  {transaction.type === "create"
-                                    ? `From: ${transaction.from}`
-                                    : `To: ${transaction.to}`}
+                                  
+                                   To: {bounty.claimedBy}
                                 </p>
                               </div>
                             </div>
                             <div className="text-right">
-                              <p className="font-medium">{transaction.amount} HIVE</p>
+                              <p className="font-medium">{bounty.amount} HIVE</p>
                               <p className="text-xs text-muted-foreground">
-                                {new Date(transaction.date).toLocaleDateString()}
+                                {bounty.claimedAt && bounty.claimedAt.toLocaleDateString()}
                               </p>
-                              {transaction.status && (
+                              {bounty.claimedTxid && (
                                 <span className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 px-2 py-1 rounded">
-                                  {transaction.status}
+                                  Txn ID: {bounty.claimedTxid}
                                 </span>
                               )}
                             </div>
                           </div>
-                        ))}
+                        
                       </div>
                     ) : (
                       <p className="text-muted-foreground">No transactions yet</p>
@@ -225,7 +204,7 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">Created by</span>
-                    <span className="font-medium">{bounty.createdBy}</span>
+                    <span className="font-medium">{bounty.userId}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between">
@@ -235,8 +214,8 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
                   <Separator />
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">Status</span>
-                    <span className={`font-medium ${bounty.status === "open" ? "text-green-600" : "text-gray-600"}`}>
-                      {bounty.status.charAt(0).toUpperCase() + bounty.status.slice(1)}
+                    <span className={`font-medium ${status === "open" ? "text-green-600" : "text-gray-600"}`}>
+                      {status.charAt(0).toUpperCase() +status.slice(1)}
                     </span>
                   </div>
                   <Separator />
@@ -265,7 +244,8 @@ export default function BountyDetailPage({ params }: { params: Promise<{ id: str
           </div>
         </div>
       </main>
-      <ClaimBountyModal open={isClaimModalOpen} onOpenChange={setIsClaimModalOpen} bountyId={id} />
+      </div>
+      <ClaimBountyModal open={isClaimModalOpen} onOpenChange={setIsClaimModalOpen} issueData={bounty} bountyId={id} />
     </div>
   )
 }

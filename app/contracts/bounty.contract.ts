@@ -46,7 +46,7 @@ export class BountyContract {
 
       (window.hive_keychain as any).requestCustomJson(
         this.username,
-        'dev-bounties', // Custom operation ID for our app
+        'dev-bounties', 
         'Active',
         JSON.stringify({
           type: 'bounty_create',
@@ -54,7 +54,8 @@ export class BountyContract {
         }),
         'Create Development Bounty',
         (response: any) => {
-          if (response.success && response.result && response.result.id) {
+          console.log(response);
+          if (response.success) {
             // First, transfer HIVE to contract account after successful custom_json
             sendHiveTokens(
               this.username,
