@@ -237,5 +237,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Made with ❤️ by the HiveBounty Team**
+**Developers:** [Vinit Vijal](https://github.com/vinitvijal), [Sharma Anurag](https://github.com/Anu9969)
+
 
 *Empowering open source development through blockchain rewards*
